@@ -14,21 +14,25 @@ return new class extends Migration
         Schema::create('merchants', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('user_id')->unsigned();
+
             $table->string('title');
+            $table->bigInteger('m_id')->unsigned()->unique();
+            $table->string('m_key')->unique();
+
             $table->string('base_url');
             $table->string('success_url');
             $table->string('fail_url');
             $table->string('handler_url');
-            $table->string('m_id');
-            $table->string('m_key');
+
             $table->boolean('is_active')->default(false);
-            $table->boolean('moderation')->default(true);
+            $table->boolean('moderation')->default(false);
             $table->timestamps();
 
             $table->foreign('user_id')
                 ->references('id')
                 ->on('users');
 
+            $table->index('m_id');
             $table->index('user_id');
         });
     }
