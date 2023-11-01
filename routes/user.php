@@ -11,14 +11,16 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::post('/profile', [ProfileController::class, 'updateContacts'])->name('profile.update.contact');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::prefix('profile')->group(function () {
+        Route::get('edit', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('update', [ProfileController::class, 'update'])->name('profile.update');
+        Route::post('updateContacts', [ProfileController::class, 'updateContacts'])->name('profile.update.contact');
+        Route::delete('destroy', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
 
-    //Merchant 
     Route::prefix('merchant')->group(function () {
-        Route::get('add', [MerchantController::class, 'index'])->name('merchant.add');
-        Route::post('add', [MerchantController::class, 'store'])->name('merchant.store');
+        Route::get('', [MerchantController::class, 'index'])->name('merchant');
+        Route::get('add', [MerchantController::class, 'add'])->name('merchant.add');
+        Route::post('store', [MerchantController::class, 'store'])->name('merchant.store');
     });
 });
