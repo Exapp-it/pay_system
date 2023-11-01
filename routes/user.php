@@ -15,3 +15,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile', [ProfileController::class, 'updateContacts'])->name('profile.update.contact');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+Route::middleware('auth')->group(function () {
+    
+});
