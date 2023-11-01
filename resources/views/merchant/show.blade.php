@@ -16,13 +16,11 @@
                                     <section>
                                         <header>
                                             <h2 class="text-lg font-medium text-gray-900">
-                                                {{ __('Мои кассы') }}
+                                                {{ __('Касса')  . ' - ' . $merchant->title }}
                                             </h2>
                                         </header>
-                                        @foreach($merchants as $merchant)
                                         <hr>
                                         <div class="flex gap-8">
-                                            <p>{{ $merchant->id }}</p>
                                             <p>
                                                 <b>
                                                     {{__('Название: ')}}
@@ -59,7 +57,6 @@
                                             </p>
                                         </div>
                                         <hr>
-                                        @endforeach
                                     </section>
                                 </div>
                             </div>

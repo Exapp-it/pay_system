@@ -10,9 +10,18 @@ class MerchantController extends Controller
 {
     public function index()
     {
-        $service = new MerchantService();
+       $merchants = Merchant::where('user_id', auth()->user()->id)
+           ->orderBy('id', 'desc')
+           ->get();
 
-        return view('merchant.index', ['merchants' => $service->userMerchants()]);
+       return view('merchant.index', ['merchants' => $merchants]);
+    }
+
+    public function show($id)
+    {
+        $merchant = Merchant::where('m_id', $id)->first();
+
+        return view('merchant.show', ['merchant' => $merchant]);
     }
 
     public function add()
@@ -23,7 +32,22 @@ class MerchantController extends Controller
     public function store(Request $request)
     {
         $service = new MerchantService($request);
+
         $service->validate()->create();
+
         return 'OK';
+    }
+
+    public function edit($id)
+    {
+        $merchant = Merchant::where('m_id', $id)->first();
+
+        return view('merchant.edit', ['merchant' => $merchant]);    }
+
+    public function update(Request $request, $id)
+    {
+        Merchant::where('m_id', $id)->update(['title' => $request->input('title')]);
+
+        return redirect()->route('merchant.edit', ['id' => $id]);
     }
 }

@@ -41,10 +41,6 @@ class MerchantService
         ]);
     }
 
-    public function userMerchants()
-    {
-        return Merchant::where('user_id', auth()->user()->id)->orderBy('id', 'desc')->get();
-    }
 
     protected function generateId()
     {
