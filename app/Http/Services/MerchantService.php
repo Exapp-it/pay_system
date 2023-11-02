@@ -40,17 +40,21 @@ class MerchantService
         ]);
     }
 
-    public function getHash(): string
+    public function getHash(Merchant $merchant): string
     {
-        $merchant = Merchant::where('m_id', $this->request->input('id'))->first();
-        $m_id = $merchant->m_id;
-        $amount = $this->request->input('amount');
-        $currency = $this->request->input('currency');
-        $m_key = $merchant->m_key;
-        $string = implode(', ', [$m_id, $amount, $currency, $m_key]);
-        return base64_encode($string);;
-    }
+        $data = [
+            $merchant->m_id,
+            $this->request->input('order'),
+            $this->request->input('amount'),
+            $this->request->input('currency'),
+            $merchant->m_key,
+        ];
 
+        $hashString = implode(':', $data);
+        $hashedValue = hash('sha256', $hashString);
+
+        return strtoupper($hashedValue);
+    }
 
     protected function generateId(): int
     {

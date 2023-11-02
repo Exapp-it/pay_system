@@ -13,7 +13,7 @@ class Merchant extends Model
 
     protected $fillable = [
         'user_id', 'title',
-        'base_url',    'success_url',
+        'base_url', 'success_url',
         'fail_url', 'handler_url',
         'm_id', 'm_key',
         'is_active', 'moderation',
@@ -28,6 +28,12 @@ class Merchant extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+
+    public function scopeWithModeration($query)
+    {
+        return $query->where('moderation', true);
     }
 
 

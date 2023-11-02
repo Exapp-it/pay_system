@@ -1,50 +1,66 @@
-function sendData() {
-    var m_shop = '1970626524';
-    var m_orderid = '1';
-    var m_amount = (100).toFixed(2);
-    var m_curr = 'USD';
-    var m_key = 'Ваш секретный ключ';
+import http from 'http';
+import querystring from 'querystring';
+import crypto from 'crypto';
 
-    var arHash = [
-        m_shop,
-        m_orderid,
-        m_amount,
-        m_curr,
-    ];
-
-    arHash.push(m_key);
-
-    var sign = arHash.join(':');
-    sign = sign.toUpperCase();
-    sign = sha256(sign); // Замените на соответствующий код для вычисления хеша
-
-    fetch('/merchant/handler', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: 'm_shop=' + encodeURIComponent(m_shop) +
-            '&m_orderid=' + encodeURIComponent(m_orderid) +
-            '&m_amount=' + encodeURIComponent(m_amount) +
-            '&m_curr=' + encodeURIComponent(m_curr) +
-            '&m_sign=' + encodeURIComponent(sign) +
-            '&form[curr[2609]]=' + encodeURIComponent('USD')
-    })
-        .then(function(response) {
-            if (response.status === 200) {
-                return response.text();
-            } else {
-                throw new Error('Ошибка при отправке данных: ' + response.status);
-            }
-        })
-        .then(function(data) {
-            // Здесь можно обработать ответ от сервера, если необходимо
-            console.log('Ответ сервера:', data);
-        })
-        .catch(function(error) {
-            console.error(error);
-        });
+function sha256(input) {
+    const hash = crypto.createHash('sha256');
+    hash.update(input);
+    return hash.digest('hex');
 }
 
-// Вызов функции для отправки данных
-sendData();
+function test() {
+    const id = '813500717006';
+    const order = '1';
+    const amount = (100).toFixed(2);
+    const currency = 'RUB';
+    const key = 'GQPq5cfmAjEgTajMvheKPVfAO5bO0vcC';
+
+    const data = [id, order, amount, currency, key];
+
+    const hashString = data.join(':');
+    const hashedValue = sha256(hashString);
+
+    const signature = hashedValue.toUpperCase();
+
+    const url = 'http://127.0.0.1:8000/merchant/handler'; // Замените на URL вашего обработчика
+
+    const formData = querystring.stringify({
+        id: id,
+        order: order,
+        amount: amount,
+        currency: currency,
+        signature: signature,
+        handler: 'process'
+    });
+
+    const options = {
+        hostname: '127.0.0.1', // Замените на ваш хост
+        port: 8000, // Используйте 443, если используете HTTPS
+        path: '/merchant/handler', // Путь к обработчику на сервере
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Length': formData.length
+        }
+    };
+
+    const req = http.request(options, (res) => {
+        let data = '';
+        res.on('data', (chunk) => {
+            data += chunk;
+        });
+
+        res.on('end', () => {
+            console.log(data);
+        });
+    });
+
+    req.on('error', (error) => {
+        console.error(error);
+    });
+
+    req.write(formData);
+    req.end();
+}
+
+test();
