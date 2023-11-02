@@ -57,8 +57,8 @@ class MerchantHandlerController extends Controller
             'data' => [
                 'operation_id' => $transaction->id,
                 'operation_pay_system' => $payment->payment_system,
-                'operation_date' => $transaction->created_at,
-                'operation_pay_date' => $transaction->updated_at,
+                'operation_date' => $transaction->created_at->format('Y-m-d H:i:s'),
+                'operation_pay_date' => $transaction->updated_at->format('Y-m-d H:i:s'),
                 'shop' => $payment->m_id,
                 'amount' => $transaction->amount,
                 'currency' => $transaction->currency,
