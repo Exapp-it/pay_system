@@ -3,6 +3,8 @@
 namespace App\Http\Services;
 
 use App\Models\Merchant;
+use App\Models\Payment;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 
 
@@ -26,12 +28,12 @@ class MerchantHandlerService
     public function validate(): void
     {
         $this->request->validate([
-            'id' => 'required',
-            'order' => 'required',
-            'amount' => 'required',
-            'currency' => 'required',
-            'signature' => 'required',
-            'handler' => 'required',
+            'shop' => ['required'],
+            'order' => ['required'],
+            'amount' => ['required', 'numeric'],
+            'currency' => ['required'],
+            'signature' => ['required'],
+            'handler' => ['required'],
         ]);;
     }
 
@@ -67,6 +69,24 @@ class MerchantHandlerService
         return strtoupper($hashedValue);
     }
 
+    public function createPayment()
+    {
+        return Payment::create([
+            'm_id' => $this->merchant->m_id,
+            'amount' => $this->request->post('amount'),
+            'payment_system' => 'p2p',
+            'currency' => $this->request->post('currency'),
+        ]);
+    }
+
+    public function addTransaction($payment)
+    {
+        return Transaction::create([
+            'p_id' => $payment->id,
+            'amount' => $payment->amount,
+            'currency' => $payment->currency,
+        ]);
+    }
 
 
 }

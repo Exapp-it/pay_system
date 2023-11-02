@@ -9,13 +9,13 @@ function sha256(input) {
 }
 
 function test() {
-    const id = '813500717006';
+    const shop = '760106531410';
     const order = '1';
     const amount = (100).toFixed(2);
     const currency = 'RUB';
-    const key = 'GQPq5cfmAjEgTajMvheKPVfAO5bO0vcC';
+    const key = ':TbUuVLoTvZtoWo3qI9TUGdl%ejyif?U';
 
-    const data = [id, order, amount, currency, key];
+    const data = [shop, order, amount, currency, key];
 
     const hashString = data.join(':');
     const hashedValue = sha256(hashString);
@@ -25,7 +25,7 @@ function test() {
     const url = 'http://127.0.0.1:8000/merchant/handler'; // Замените на URL вашего обработчика
 
     const formData = querystring.stringify({
-        id: id,
+        shop: shop,
         order: order,
         amount: amount,
         currency: currency,
