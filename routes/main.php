@@ -10,5 +10,13 @@ Route::get('/', function () {
 
 Route::post('merchant/handler', [MerchantHandlerController::class, 'handler'])->name('merchant.handler');
 
+Route::get('merchant/handler', function(){
+return "
+<form>
+
+ </form>
+";
+});
+
 
 

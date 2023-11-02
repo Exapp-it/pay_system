@@ -6,15 +6,14 @@ use App\Models\Merchant;
 use Illuminate\Http\Request;
 
 
-
 class MerchantService
 {
 
-    public function __construct(private ?Request $request = null)
+    public function __construct(private readonly ?Request $request = null)
     {
     }
 
-    public function validate()
+    public function validate(): static
     {
         $this->request->validate([
             'title' => 'required', 'string',
@@ -41,8 +40,19 @@ class MerchantService
         ]);
     }
 
+    public function getHash(): string
+    {
+        $merchant = Merchant::where('m_id', $this->request->input('id'))->first();
+        $m_id = $merchant->m_id;
+        $amount = $this->request->input('amount');
+        $currency = $this->request->input('currency');
+        $m_key = $merchant->m_key;
+        $string = implode(', ', [$m_id, $amount, $currency, $m_key]);
+        return base64_encode($string);;
+    }
 
-    protected function generateId()
+
+    protected function generateId(): int
     {
         $baseValue = time() * 1000;
         $randomDigits = mt_rand(1000, 9999);
@@ -52,13 +62,13 @@ class MerchantService
 
         $uniqueId = substr(intval($shuffledBaseValueString) + $randomDigits, 0, 12);
 
-        return (int) $uniqueId;
+        return (int)$uniqueId;
     }
 
 
-    protected function generateKey()
+    protected function generateKey(): string
     {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $characters = '0123456789#&%?:.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $key = '';
 
         for ($i = 0; $i < 32; $i++) {
