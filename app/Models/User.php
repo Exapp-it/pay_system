@@ -45,6 +45,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
+    /**
+     * @return HasMany
+     */
     public function merchants(): HasMany
     {
         return $this->hasMany(Merchant::class, 'user_id');

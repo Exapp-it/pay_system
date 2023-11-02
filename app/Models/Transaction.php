@@ -10,6 +10,9 @@ class Transaction extends Model
 {
     use HasFactory;
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'p_id',
         'amount',
@@ -18,11 +21,17 @@ class Transaction extends Model
         'canceled',
     ];
 
+    /**
+     * @var string[]
+     */
     protected $casts = [
         'confirmed' => 'boolean',
         'canceled' => 'boolean',
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function payment(): BelongsTo
     {
         return $this->belongsTo(Payment::class, 'p_id', 'id');

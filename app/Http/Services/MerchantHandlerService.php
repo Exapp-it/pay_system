@@ -11,20 +11,33 @@ use Illuminate\Http\Request;
 class MerchantHandlerService
 {
 
+    /**
+     * @var Merchant|null
+     */
     protected ?Merchant $merchant = null;
 
+    /**
+     * @param Request|null $request
+     */
     public function __construct(
         private readonly ?Request $request = null,
     )
     {
     }
 
+    /**
+     * @param Merchant|null $merchant
+     * @return $this
+     */
     public function setMerchant(?Merchant $merchant): MerchantHandlerService
     {
         $this->merchant = $merchant;
         return $this;
     }
 
+    /**
+     * @return void
+     */
     public function validate(): void
     {
         $this->request->validate([
@@ -37,22 +50,34 @@ class MerchantHandlerService
         ]);;
     }
 
+    /**
+     * @return bool
+     */
     public function isProcess(): bool
     {
         return $this->request->post('handler') === 'process';
     }
 
+    /**
+     * @return bool
+     */
     public function verifyHash(): bool
     {
         return $this->getHash($this->merchant) === $this->request->post('signature');
     }
 
+    /**
+     * @return bool
+     */
     public function merchantExists(): bool
     {
         return (bool)$this->merchant;
     }
 
 
+    /**
+     * @return string
+     */
     protected function getHash(): string
     {
         $data = [
@@ -69,6 +94,9 @@ class MerchantHandlerService
         return strtoupper($hashedValue);
     }
 
+    /**
+     * @return mixed
+     */
     public function createPayment()
     {
         return Payment::create([
@@ -79,7 +107,11 @@ class MerchantHandlerService
         ]);
     }
 
-    public function addTransaction($payment)
+    /**
+     * @param $payment
+     * @return mixed
+     */
+    public function addTransaction($payment): mixed
     {
         return Transaction::create([
             'p_id' => $payment->id,

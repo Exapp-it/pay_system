@@ -11,6 +11,9 @@ class Payment extends Model
 {
     use HasFactory;
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'm_id',
         'amount',
@@ -20,15 +23,24 @@ class Payment extends Model
         'moderation',
     ];
 
+    /**
+     * @var string[]
+     */
     protected $casts = [
         'moderation' => 'boolean',
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function merchant(): BelongsTo
     {
         return $this->belongsTo(Merchant::class, 'm_id', 'm_id');
     }
 
+    /**
+     * @return HasOne
+     */
     public function transaction(): HasOne
     {
         return $this->hasOne(Transaction::class, 'p_id', 'id');

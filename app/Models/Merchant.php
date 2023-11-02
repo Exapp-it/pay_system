@@ -13,6 +13,9 @@ class Merchant extends Model
 {
     use HasFactory;
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'user_id',
         'title',
@@ -26,24 +29,37 @@ class Merchant extends Model
         'moderation',
     ];
 
+    /**
+     * @var string[]
+     */
     protected $casts = [
         'is_active' => 'boolean',
         'moderation' => 'boolean',
     ];
 
 
+    /**
+     * @return BelongsTo
+     */
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * @return HasMany
+     */
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class, 'm_id', 'm_id');
     }
 
 
-    public function scopeActiveAndModerated($query)
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function scopeActiveAndModerated($query): mixed
     {
         return $query->where('moderation', true)
             ->where('is_active', true);

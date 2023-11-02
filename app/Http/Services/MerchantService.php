@@ -9,10 +9,16 @@ use Illuminate\Http\Request;
 class MerchantService
 {
 
+    /**
+     * @param Request|null $request
+     */
     public function __construct(private readonly ?Request $request = null)
     {
     }
 
+    /**
+     * @return $this
+     */
     public function validate(): static
     {
         $this->request->validate([
@@ -26,7 +32,10 @@ class MerchantService
         return $this;
     }
 
-    public function create()
+    /**
+     * @return mixed
+     */
+    public function create(): mixed
     {
         return Merchant::create([
             'user_id' => $this->request->user()->id,
@@ -40,6 +49,10 @@ class MerchantService
         ]);
     }
 
+    /**
+     * @param Merchant $merchant
+     * @return string
+     */
     public function getHash(Merchant $merchant): string
     {
         $data = [
@@ -56,6 +69,9 @@ class MerchantService
         return strtoupper($hashedValue);
     }
 
+    /**
+     * @return int
+     */
     protected function generateId(): int
     {
         $baseValue = time() * 1000;
@@ -70,6 +86,9 @@ class MerchantService
     }
 
 
+    /**
+     * @return string
+     */
     protected function generateKey(): string
     {
         $characters = '0123456789#&%?:.abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

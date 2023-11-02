@@ -6,10 +6,15 @@ use App\Http\Services\MerchantHandlerService;
 use App\Models\Merchant;
 use App\Models\Payment;
 use App\Models\Transaction;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class MerchantHandlerController extends Controller
 {
+    /**
+     * @param Request $request
+     * @return JsonResponse|string
+     */
     public function handler(Request $request): \Illuminate\Http\JsonResponse|string
     {
         $merchant = Merchant::activeAndModerated()
@@ -38,6 +43,10 @@ class MerchantHandlerController extends Controller
         return $this->respondSuccess($transaction);
     }
 
+    /**
+     * @param $transaction
+     * @return JsonResponse
+     */
     private function respondSuccess($transaction): \Illuminate\Http\JsonResponse
     {
         $payment = $transaction->payment()->first();
@@ -57,6 +66,10 @@ class MerchantHandlerController extends Controller
         ]);
     }
 
+    /**
+     * @param $message
+     * @return JsonResponse
+     */
     private function respondError($message): \Illuminate\Http\JsonResponse
     {
         return response()->json([
