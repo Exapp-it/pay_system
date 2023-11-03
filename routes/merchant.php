@@ -16,5 +16,8 @@ Route::middleware('auth')->group(function () {
     Route::put('{id}/update', [MerchantController::class, 'update'])->name('merchant.update');
 });
 
-Route::post('handler', [MerchantHandlerController::class, 'handler'])->middleware('merchant')->name('merchant.handler');
+Route::post('handler', [MerchantHandlerController::class, 'handler'])
+    ->middleware('merchant')
+    ->name('merchant.handler');
+
 Route::get('test', [TestController::class, 'test'])->name('merchant.test');

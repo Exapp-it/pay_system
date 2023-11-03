@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+@layer utilities {
+    .active {
+        @apply bg-yellow-400  text-black shadow-md
+    }
+}

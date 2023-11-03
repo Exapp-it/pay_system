@@ -30,7 +30,16 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->prefix('merchant')
-                ->group(base_path('routes/merchant.php'));
+                ->group(function () {
+                    require base_path('routes/merchant.php');
+                });
+
+            Route::middleware('web')
+                ->prefix('admin')
+                ->group(function () {
+                    require base_path('routes/admin.php');
+                });
+
         });
     }
 }
