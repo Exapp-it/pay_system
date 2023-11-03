@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\MerchantHandlerService;
 use App\Models\Merchant;
-use App\Models\Payment;
-use App\Models\Transaction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -26,9 +24,6 @@ class MerchantHandlerController extends Controller
         $service->setMerchant($merchant);
         $service->validate();
 
-        if (!$service->isProcess()) {
-            return $this->respondError('Process Error');
-        }
 
         if (!$service->merchantExists()) {
             return $this->respondError('Merchant not found');
@@ -40,7 +35,7 @@ class MerchantHandlerController extends Controller
 
         $payment = $service->createPayment();
         $transaction = $service->addTransaction($payment);
-        return $this->respondSuccess($transaction);
+        return response()->json($service->transactionMapping($transaction));
     }
 
     /**
