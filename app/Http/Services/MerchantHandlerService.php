@@ -16,24 +16,12 @@ class MerchantHandlerService
      */
     protected ?Merchant $merchant = null;
 
-    /**
-     * @param Request|null $request
-     */
-    public function __construct(
-        private readonly ?Request $request = null,
-    )
-    {
-    }
 
-    /**
-     * @param Merchant|null $merchant
-     * @return $this
-     */
-    public function setMerchant(?Merchant $merchant): MerchantHandlerService
+    public function __construct(private readonly ?Request $request, ?Merchant $merchant = null)
     {
         $this->merchant = $merchant;
-        return $this;
     }
+
 
     /**
      * @return void
@@ -46,17 +34,9 @@ class MerchantHandlerService
             'amount' => ['required', 'numeric'],
             'currency' => ['required'],
             'signature' => ['required'],
-            'handler' => ['required'],
         ]);;
     }
 
-    /**
-     * @return bool
-     */
-    public function isProcess(): bool
-    {
-        return $this->request->post('handler') === 'process';
-    }
 
     /**
      * @return bool
@@ -82,9 +62,9 @@ class MerchantHandlerService
     {
         $data = [
             $this->merchant->m_id,
-            $this->request->input('order'),
-            $this->request->input('amount'),
-            $this->request->input('currency'),
+            $this->request->post('order'),
+            $this->request->post('amount'),
+            $this->request->post('currency'),
             $this->merchant->m_key,
         ];
 
@@ -97,13 +77,14 @@ class MerchantHandlerService
     /**
      * @return mixed
      */
-    public function createPayment()
+    public function createPayment(): mixed
     {
         return Payment::create([
             'm_id' => $this->merchant->m_id,
             'amount' => $this->request->post('amount'),
-            'payment_system' => 'p2p',
             'currency' => $this->request->post('currency'),
+            'order' => $this->request->post('order'),
+            'payment_system' => 'p2p',
         ]);
     }
 
@@ -118,6 +99,30 @@ class MerchantHandlerService
             'amount' => $payment->amount,
             'currency' => $payment->currency,
         ]);
+    }
+
+    /**
+     * @param Transaction $transaction
+     * @return array
+     */
+    public function transactionMapping(Transaction $transaction): array
+    {
+        $payment = $transaction->payment()->first();
+
+        return [
+            'status' => 'success',
+            'message' => 'ok',
+            'data' => [
+                'operation_id' => $transaction->id,
+                'operation_pay_system' => $payment->payment_system,
+                'operation_date' => $transaction->created_at->format('Y-m-d H:i:s'),
+                'operation_pay_date' => $transaction->updated_at->format('Y-m-d H:i:s'),
+                'shop' => $payment->m_id,
+                'amount' => $transaction->amount,
+                'order' => $payment->order,
+                'currency' => $transaction->currency,
+            ],
+        ];
     }
 
 

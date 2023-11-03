@@ -8,11 +8,11 @@ class TestController extends Controller
 {
     public function test(): void
     {
-        $shop = '760106531410';
+        $shop = '190916925350';
         $order = '1';
         $amount = number_format(100, 2, '.', '');
         $currency = 'RUB';
-        $key = ':TbUuVLoTvZtoWo3qI9TUGdl%ejyif?U';
+        $key = 'mEbZKIF5#3c0I82w5LFAdQzTMOW4F7VV';
 
         $data = [
             $shop,

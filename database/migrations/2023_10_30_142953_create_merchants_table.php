@@ -17,7 +17,7 @@ return new class extends Migration
 
             $table->string('title');
             $table->bigInteger('m_id')->unsigned()->unique();
-            $table->string('m_key')->unique();
+            $table->text('m_key');
 
             $table->string('base_url');
             $table->string('success_url');

@@ -17,9 +17,10 @@ class Payment extends Model
     protected $fillable = [
         'm_id',
         'amount',
+        'currency',
+        'order',
         'payment_system',
         'pay_screen',
-        'currency',
         'moderation',
     ];
 

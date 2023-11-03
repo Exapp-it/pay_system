@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('p_id')->unsigned();
-            $table->float('amount');
+
+            $table->decimal('amount');
             $table->string('currency');
+
             $table->boolean('confirmed')->default(false);
             $table->boolean('canceled')->default(false);
 

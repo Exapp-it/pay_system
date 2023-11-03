@@ -22,11 +22,11 @@ class MerchantService
     public function validate(): static
     {
         $this->request->validate([
-            'title' => 'required', 'string',
-            'base_url' => 'required', 'string',
-            'success_url' => 'required', 'string',
-            'fail_url' => 'required', 'string',
-            'handler_url' => 'required', 'string',
+            'title' => ['required', 'string'],
+            'base_url' => ['required', 'string', 'unique:merchants,base_url'],
+            'success_url' => ['required', 'string'],
+            'fail_url' => ['required', 'string'],
+            'handler_url' => ['required', 'string'],
         ]);;
 
         return $this;
@@ -37,15 +37,20 @@ class MerchantService
      */
     public function create(): mixed
     {
+        $baseUrl = rtrim($this->request->input('base_url'), '/');
+        $successUrl = $baseUrl . '/' . $this->request->input('success_url');
+        $failUrl = $baseUrl . '/' . $this->request->input('fail_url');
+        $handlerUrl = $baseUrl . '/' . $this->request->input('handler_url');
+
         return Merchant::create([
             'user_id' => $this->request->user()->id,
             'm_id' => $this->generateId(),
             'm_key' => $this->generateKey(),
             'title' => $this->request->input('title'),
-            'base_url' => $this->request->input('base_url'),
-            'success_url' => $this->request->input('success_url'),
-            'fail_url' => $this->request->input('fail_url'),
-            'handler_url' => $this->request->input('handler_url'),
+            'base_url' => $baseUrl,
+            'success_url' => $successUrl,
+            'fail_url' => $failUrl,
+            'handler_url' => $handlerUrl,
         ]);
     }
 

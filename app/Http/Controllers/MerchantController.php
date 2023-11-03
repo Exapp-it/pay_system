@@ -30,7 +30,7 @@ class MerchantController extends Controller
      */
     public function show($id): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $merchant = Merchant::where('m_id', $id)->first();
+        $merchant = Merchant::find($id);
 
         return view('merchant.show', ['merchant' => $merchant]);
     }
@@ -43,17 +43,18 @@ class MerchantController extends Controller
         return view('merchant.add');
     }
 
+
     /**
      * @param Request $request
-     * @return string
+     * @return RedirectResponse
      */
-    public function store(Request $request): string
+    public function store(Request $request): RedirectResponse
     {
         $service = new MerchantService($request);
 
-        $service->validate()->create();
+        $merchant = $service->validate()->create();
 
-        return 'OK';
+        return redirect()->to(route('merchant.show', [$merchant->id]));
     }
 
     /**
@@ -76,6 +77,6 @@ class MerchantController extends Controller
     {
         Merchant::where('m_id', $id)->update(['title' => $request->input('title')]);
 
-        return redirect()->route('merchant.edit', ['id' => $id]);
+        return redirect()->route('merchant.edit', [$id]);
     }
 }

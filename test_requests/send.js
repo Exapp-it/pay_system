@@ -9,11 +9,11 @@ function sha256(input) {
 }
 
 function test() {
-    const shop = '760106531410';
+    const shop = '619807101945';
     const order = '1';
-    const amount = (100).toFixed(2);
+    const amount = (1250).toFixed(2);
     const currency = 'RUB';
-    const key = ':TbUuVLoTvZtoWo3qI9TUGdl%ejyif?U';
+    const key = '%JMlzywPF4Fgw?mpksIsI%3N8CcIsaJO';
 
     const data = [shop, order, amount, currency, key];
 

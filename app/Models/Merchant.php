@@ -35,6 +35,7 @@ class Merchant extends Model
     protected $casts = [
         'is_active' => 'boolean',
         'moderation' => 'boolean',
+        'm_key' => 'encrypted',
     ];
 
 

@@ -13,16 +13,24 @@ return new class extends Migration {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('m_id')->unsigned();
-            $table->float('amount');
-            $table->string('payment_system');
-            $table->string('pay_screen')->nullable();
+
+            $table->decimal('amount');
             $table->string('currency');
+            $table->string('order');
+
+            $table->bigInteger('payment_system')->unsigned();
+            $table->string('pay_screen')->nullable();
+
             $table->boolean('moderation')->default(false);
             $table->timestamps();
 
             $table->foreign('m_id')
                 ->references('m_id')
                 ->on('merchants');
+
+            $table->foreign('payment_system')
+                ->references('id')
+                ->on('payment_systems');
 
             $table->index('id');
             $table->index('m_id');

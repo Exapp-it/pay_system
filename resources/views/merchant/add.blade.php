@@ -36,20 +36,23 @@
 
                                             <div>
                                                 <x-input-label for="success_url" :value="__('URL успешной оплаты:')" />
-                                                <x-text-input id="success_url" name="success_url" type="text" class="mt-1 block w-full" placeholder="https://ваш.сайт/success" :value="old('success_url')" />
+                                                <x-text-input id="success_url" name="success_url" type="text" class="mt-1 block w-full" placeholder="success" :value="old('success_url')" />
                                                 <x-input-error class="mt-2" :messages="$errors->get('success_url')" />
+                                                <small class="text-gray-500">{{ __('Пример: success') }}</small>
                                             </div>
 
                                             <div>
                                                 <x-input-label for="fail_url" :value="__('URL неуспешной оплаты:')" />
-                                                <x-text-input id="fail_url" name="fail_url" type="text" class="mt-1 block w-full" placeholder="https://ваш.сайт/fail" :value="old('fail_url')" />
+                                                <x-text-input id="fail_url" name="fail_url" type="text" class="mt-1 block w-full" placeholder="fail" :value="old('fail_url')" />
                                                 <x-input-error class="mt-2" :messages="$errors->get('fail_url')" />
+                                                <small class="text-gray-500">{{ __('Пример: fail') }}</small>
                                             </div>
 
                                             <div>
                                                 <x-input-label for="handler_url" :value="__('URL обработчика:')" />
-                                                <x-text-input id="handler_url" name="handler_url" type="text" class="mt-1 block w-full" placeholder="https://ваш.сайт/handler" :value="old('handler_url')" />
+                                                <x-text-input id="handler_url" name="handler_url" type="text" class="mt-1 block w-full" placeholder="handler" :value="old('handler_url')" />
                                                 <x-input-error class="mt-2" :messages="$errors->get('handler_url')" />
+                                                <small class="text-gray-500">{{ __('Пример: handler') }}</small>
                                             </div>
 
                                             <div class="flex items-center gap-4">
