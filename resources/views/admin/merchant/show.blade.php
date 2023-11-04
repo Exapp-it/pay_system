@@ -80,7 +80,7 @@
                         <div class="px-2 py-4 lg:w-1/3">
                             <label
                                 class="relative block overflow-hidden border-b border-gray-200 bg-transparent pt-3 focus-within:border-blue-600">
-                                <input type="text" value="{{ $merchant->fail_url  }}" disabled
+                                <input type="text" value="{{ $merchant->handler_url  }}" disabled
                                        class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"/>
                                 <span
                                     class="absolute start-0 top-2 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs">
@@ -91,18 +91,18 @@
                     </div>
 
                     <div class="flex justify-center">
-                        @if ($merchant->moderation)
+                        @if ($merchant->approved)
                             <div class="px-2 py-4">
                                 <form action="{{ route("merchant.update", $merchant->id) }}" method="POST">
                                     @csrf
-                                    @if ($merchant->is_active)
+                                    @if ($merchant->banned)
                                         <button type="submit"
                                                 class="group relative inline-block overflow-hidden border border-yellow-400 px-8 py-3 focus:outline-none focus:ring">
                                         <span
                                             class="absolute inset-y-0 left-0 w-[2px] bg-yellow-400 transition-all group-hover:w-full group-active:bg-yellow-400"></span>
                                             <span
                                                 class="relative text-sm font-medium text-black  transition-colors group-hover:text-black">
-                                            {{ __('Заблокировать')  }}
+                                            {{ __('Разблокировать')  }}
                                         </span>
                                         </button>
                                     @else
@@ -112,7 +112,7 @@
                                             class="absolute inset-y-0 left-0 w-[2px] bg-yellow-400 transition-all group-hover:w-full group-active:bg-yellow-400"></span>
                                             <span
                                                 class="relative text-sm font-medium text-black  transition-colors group-hover:text-black">
-                                            {{ __('Разблокировать')  }}
+                                            {{ __('Заблокировать')  }}
                                         </span>
                                         </button>
                                     @endif

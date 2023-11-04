@@ -53,13 +53,13 @@
                     </a>
 
 
-
                 </div>
             </nav>
         </div>
 
         <div class="flex-1 flex flex-col overflow-hidden">
-            <header class="flex justify-between items-center py-4 px-6 shadow-2xl bg-gray-50 border-b-2 border-yellow-400">
+            <header
+                class="flex justify-between items-center py-4 px-6 shadow-2xl bg-gray-50 border-b-2 border-yellow-400">
                 <div class="flex items-center">
                     <button @click="sidebarOpen = true" class="text-gray-500 focus:outline-none lg:hidden">
                         <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -86,8 +86,10 @@
                         <div x-show="dropdownOpen"
                              class="absolute right-0 mt-2 w-48 bg-white rounded-md overflow-hidden shadow-xl z-10"
                              style="display: none;">
-                            <a href="{{ route("logout") }}"
-                               class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-400">Выйти</a>
+                            <form action="{{ route("logout") }}" method="POST">
+                                @csrf
+                                <button type="submit" class="block px-4 py-2 text-sm w-full text-gray-700 hover:bg-yellow-400">Выйти</button>
+                            </form>
                         </div>
                     </div>
                 </div>

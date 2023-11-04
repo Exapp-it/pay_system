@@ -26,6 +26,7 @@ class Merchant extends Model
         'm_id',
         'm_key',
         'approved',
+        'rejected',
         'activated',
         'banned',
     ];
@@ -36,6 +37,7 @@ class Merchant extends Model
     protected $casts = [
         'm_key' => 'encrypted',
         'approved' => 'boolean',
+        'rejected' => 'boolean',
         'activated' => 'boolean',
         'banned' => 'boolean',
     ];

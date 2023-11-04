@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('handler_url');
 
             $table->boolean('approved')->default(false);
+            $table->boolean('rejected')->default(false);
             $table->boolean('activated')->default(false);
             $table->boolean('banned')->default(false);
             $table->timestamps();

@@ -52,7 +52,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                     <div class="text-sm leading-5 text-gray-900">
-                                        @if ($merchant->is_active)
+                                        @if ($merchant->activated)
                                             <span
                                                 class="px-3  inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-400 shadow text-black">
                                                 {{ __('Подключен')  }}
@@ -68,7 +68,7 @@
 
                                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                     <div class="text-sm leading-5 text-gray-900">
-                                        @if ($merchant->moderation)
+                                        @if ($merchant->approved)
                                             <span
                                                 class="px-3 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-400 shadow text-black">
                                                 {{ __('Подтвержден')  }}

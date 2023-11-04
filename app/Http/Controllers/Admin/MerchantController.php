@@ -7,6 +7,7 @@ use App\Models\Merchant;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class MerchantController extends Controller
@@ -33,10 +34,29 @@ class MerchantController extends Controller
         return view('admin.merchant.show', ['merchant' => $merchant]);
     }
 
-    public function approve(Request $request, $id)
+    /**
+     * @param Request $request
+     * @param $id
+     * @return RedirectResponse
+     */
+    public function approve(Request $request, $id): \Illuminate\Http\RedirectResponse
     {
         $merchant = Merchant::find($id);
-        $merchant->moderation = !$merchant->moderation;
+        $merchant->approved = !$merchant->approved;
+        $merchant->save();
+
+        return back();
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @return RedirectResponse
+     */
+    public function reject(Request $request, $id): RedirectResponse
+    {
+        $merchant = Merchant::find($id);
+        $merchant->rejected = !$merchant->rejected;
         $merchant->save();
 
         return back();

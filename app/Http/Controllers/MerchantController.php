@@ -41,7 +41,7 @@ class MerchantController extends Controller
      */
     public function create(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('merchant.add');
+        return view('merchant.create');
     }
 
 

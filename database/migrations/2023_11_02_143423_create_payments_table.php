@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->bigInteger('payment_system')->unsigned();
             $table->string('pay_screen')->nullable();
 
-            $table->boolean('moderation')->default(false);
+            $table->boolean('approved')->default(false);
             $table->timestamps();
 
             $table->foreign('m_id')
