@@ -24,9 +24,9 @@
                                 Username
                             </th>
                             <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                Username
+                                {{ __('Статус')  }}
                             </th>
-                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>
+{{--                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50"></th>--}}
                         </tr>
                         </thead>
 
@@ -40,28 +40,41 @@
                                     <div class="text-sm leading-5 text-gray-900">{{ $user->username }}</div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                    <div class="text-sm leading-5 text-gray-900">{{ $user->is_active }}</div>
+                                    <div class="text-sm leading-5 text-gray-900">
+                                        @if ($user->is_active)
+                                            <span
+                                                class="px-3 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-600 shadow text-green-100">
+                                                Active
+                                            </span>
+                                        @else
+                                            <span
+                                                class="px-3 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-600 shadow text-red-100">
+                                                Banned
+                                            </span>
+                                        @endif
+                                    </div>
                                 </td>
 
-{{--                                <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">--}}
-{{--                                    <a href="{{ route("admin.admin_users.edit", $user->id) }}"--}}
-{{--                                       class="text-indigo-600 hover:text-indigo-900">Редактировать</a>--}}
 
-{{--                                    <form action="{{ route("admin.admin_users.destroy", $user->id) }}" method="POST">--}}
-{{--                                        @csrf--}}
+                                {{--                                <td class="px-6 py-4 whitespace-no-wrap text-right border-b border-gray-200 text-sm leading-5 font-medium">--}}
+                                {{--                                    <a href="{{ route("admin.admin_users.edit", $user->id) }}"--}}
+                                {{--                                       class="text-indigo-600 hover:text-indigo-900">Редактировать</a>--}}
 
-{{--                                        @method('DELETE')--}}
+                                {{--                                    <form action="{{ route("admin.admin_users.destroy", $user->id) }}" method="POST">--}}
+                                {{--                                        @csrf--}}
 
-{{--                                        <button type="submit" class="text-red-600 hover:text-red-900">Удалить</button>--}}
-{{--                                    </form>--}}
+                                {{--                                        @method('DELETE')--}}
 
-{{--                                </td>--}}
+                                {{--                                        <button type="submit" class="text-red-600 hover:text-red-900">Удалить</button>--}}
+                                {{--                                    </form>--}}
+
+                                {{--                                </td>--}}
                             </tr>
                         @endforeach
                         </tbody>
                     </table>
 
-{{--                    {{ $users->links() }}--}}
+                    {{ $users->links() }}
                 </div>
             </div>
         </div>

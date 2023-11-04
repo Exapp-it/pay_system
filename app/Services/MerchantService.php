@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Services;
+namespace App\Services;
 
 use App\Models\Merchant;
 use Illuminate\Http\Request;
@@ -44,7 +44,7 @@ class MerchantService
 
         return Merchant::create([
             'user_id' => $this->request->user()->id,
-            'm_id' => $this->generateId(),
+            'm_id' => $this->generateId(9),
             'm_key' => $this->generateKey(),
             'title' => $this->request->input('title'),
             'base_url' => $baseUrl,
@@ -77,7 +77,7 @@ class MerchantService
     /**
      * @return int
      */
-    protected function generateId(): int
+    protected function generateId(int $length = 12): int
     {
         $baseValue = time() * 1000;
         $randomDigits = mt_rand(1000, 9999);
@@ -85,7 +85,7 @@ class MerchantService
         $baseValueString = strval($baseValue);
         $shuffledBaseValueString = str_shuffle($baseValueString);
 
-        $uniqueId = substr(intval($shuffledBaseValueString) + $randomDigits, 0, 12);
+        $uniqueId = substr(intval($shuffledBaseValueString) + $randomDigits, 0,  $length);
 
         return (int)$uniqueId;
     }

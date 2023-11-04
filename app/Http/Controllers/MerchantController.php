@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\MerchantService;
 use App\Models\Merchant;
+use App\Services\MerchantService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -23,6 +23,7 @@ class MerchantController extends Controller
 
         return view('merchant.index', ['merchants' => $merchants]);
     }
+
 
     /**
      * @param $id

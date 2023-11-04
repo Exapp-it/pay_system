@@ -24,8 +24,9 @@ return new class extends Migration
             $table->string('fail_url');
             $table->string('handler_url');
 
-            $table->boolean('is_active')->default(false);
-            $table->boolean('moderation')->default(false);
+            $table->boolean('approved')->default(false);
+            $table->boolean('activated')->default(false);
+            $table->boolean('banned')->default(false);
             $table->timestamps();
 
             $table->foreign('user_id')

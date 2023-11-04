@@ -49,7 +49,7 @@
                                                 <b>
                                                     {{__('Статус: ')}}
                                                 </b>
-                                                @if($merchant->moderation)
+                                                @if($merchant->approved)
                                                 {{ __('Подтвержден') }}
                                                 @else
                                                 {{ __('На модерации') }}

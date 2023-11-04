@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Services\MerchantHandlerService;
 use App\Models\Merchant;
+use App\Services\MerchantHandlerService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -15,14 +15,13 @@ class MerchantHandlerController extends Controller
      */
     public function handler(Request $request): \Illuminate\Http\JsonResponse|string
     {
-        $merchant = Merchant::activeAndModerated()
+        $merchant = Merchant::approvedAndActivated()
             ->where('m_id', $request->post('shop'))
             ->first();
 
         $service = new MerchantHandlerService($request, $merchant);
 
         $service->validate();
-
 
         if (!$service->merchantExists()) {
             return $this->respondError('MerchantMiddleware not found');
@@ -32,7 +31,7 @@ class MerchantHandlerController extends Controller
             return $this->respondError('Hash no verified');
         }
 
-
+        return '1';
     }
 
     /**

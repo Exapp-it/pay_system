@@ -25,17 +25,19 @@ class Merchant extends Model
         'handler_url',
         'm_id',
         'm_key',
-        'is_active',
-        'moderation',
+        'approved',
+        'activated',
+        'banned',
     ];
 
     /**
      * @var string[]
      */
     protected $casts = [
-        'is_active' => 'boolean',
-        'moderation' => 'boolean',
         'm_key' => 'encrypted',
+        'approved' => 'boolean',
+        'activated' => 'boolean',
+        'banned' => 'boolean',
     ];
 
 
@@ -60,10 +62,11 @@ class Merchant extends Model
      * @param $query
      * @return mixed
      */
-    public function scopeActiveAndModerated($query): mixed
+    public function scopeApprovedAndActivated($query): mixed
     {
-        return $query->where('moderation', true)
-            ->where('is_active', true);
+        return $query->where('approved', true)
+            ->where('activated', true)
+            ->where('banned', false);
     }
 
 

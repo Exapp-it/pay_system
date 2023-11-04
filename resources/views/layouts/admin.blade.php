@@ -34,16 +34,23 @@
                         <span class="mx-3">Главная</span>
                     </a>
 
-                    <a href="{{ route('admin.users')  }}"
+                    <a href="{{ route('admin.users') }}"
                        class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
                        x-bind:class="{'active': currentRoute === 'admin.users'}">
                         <span class="mx-3">Пользователи</span>
                     </a>
 
-                    <a href="#"
+                    <a href="{{ route('admin.merchant') }}"
                        class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
-                       x-bind:class="{'active': currentRoute === ''}">
+                       x-bind:class="{'active': currentRoute === 'admin.merchant' || currentRoute === 'admin.merchant.show'}">
                         <span class="mx-3">Кассы</span>
+                        @if ($moderationMerchants > 0)
+                            <span class="bg-red-700 text-xs font-bold text-white px-2 py-1 rounded-full ml-auto shadow-2xl">
+                                {{$moderationMerchants}}
+                            </span>
+                        @endif
+
+
                     </a>
 
                     <a href="#"
@@ -53,13 +60,13 @@
                     </a>
 
 
-
                 </div>
             </nav>
         </div>
 
         <div class="flex-1 flex flex-col overflow-hidden">
-            <header class="flex justify-between items-center py-4 px-6 shadow-2xl bg-gray-50 border-b-2 border-yellow-400">
+            <header
+                class="flex justify-between items-center py-4 px-6 shadow-2xl bg-gray-50 border-b-2 border-yellow-400">
                 <div class="flex items-center">
                     <button @click="sidebarOpen = true" class="text-gray-500 focus:outline-none lg:hidden">
                         <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

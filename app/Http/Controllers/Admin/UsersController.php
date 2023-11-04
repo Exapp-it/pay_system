@@ -16,7 +16,7 @@ class UsersController extends Controller
      */
     public function all(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $users = User::all();
+        $users = User::query()->paginate(10);
 
         return view('admin.users', ['users' => $users]);
     }
