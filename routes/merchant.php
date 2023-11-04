@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function () {
     Route::get('', [MerchantController::class, 'index'])->name('merchant');
     Route::get('{id}/show', [MerchantController::class, 'show'])->name('merchant.show');
-    Route::get('add', [MerchantController::class, 'add'])->name('merchant.add');
+    Route::get('create', [MerchantController::class, 'create'])->name('merchant.create');
     Route::post('store', [MerchantController::class, 'store'])->name('merchant.store');
     Route::get('{id}/edit', [MerchantController::class, 'edit'])->name('merchant.edit');
     Route::put('{id}/update', [MerchantController::class, 'update'])->name('merchant.update');

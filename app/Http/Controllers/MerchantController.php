@@ -19,7 +19,7 @@ class MerchantController extends Controller
     {
         $merchants = Merchant::where('user_id', auth()->user()->id)
             ->orderBy('id', 'desc')
-            ->get();
+            ->paginate(10);
 
         return view('merchant.index', ['merchants' => $merchants]);
     }
@@ -38,7 +38,7 @@ class MerchantController extends Controller
     /**
      * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
      */
-    public function add(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function create(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         return view('merchant.add');
     }

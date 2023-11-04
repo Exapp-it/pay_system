@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\Admin\Auth\LoginController;
 use App\Http\Controllers\Admin\MainController;
+use App\Http\Controllers\Admin\UsersController;
 use Illuminate\Support\Facades\Route;
 
 
 Route::middleware('admin.auth')->group(function () {
     Route::get('/', [MainController::class, 'index'])->name('admin');
+    Route::get('users', [UsersController::class, 'all'])->name('admin.users');
     Route::get('logout', [LoginController::class, 'destroy'])->name('admin.logout');
 });
 

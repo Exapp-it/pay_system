@@ -28,16 +28,16 @@
             <nav class="mt-10">
                 <div x-data="{ currentRoute: '{{ request()->route()->getName() }}' }">
 
-                    <a href="{{ route('admin') }}"
+                    <a href="{{ route('dashboard') }}"
                        class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
-                       x-bind:class="{'active': currentRoute === 'admin'}">
+                       x-bind:class="{'active': currentRoute === 'dashboard'}">
                         <span class="mx-3">Главная</span>
                     </a>
 
-                    <a href="{{ route('admin.users')  }}"
+                    <a href="{{ route('merchant') }}"
                        class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
-                       x-bind:class="{'active': currentRoute === 'admin.users'}">
-                        <span class="mx-3">Пользователи</span>
+                       x-bind:class="{'active': currentRoute === 'merchant'}">
+                        <span class="mx-3">{{ __('Мои кассы')  }}</span>
                     </a>
 
                     <a href="#"
@@ -86,7 +86,7 @@
                         <div x-show="dropdownOpen"
                              class="absolute right-0 mt-2 w-48 bg-white rounded-md overflow-hidden shadow-xl z-10"
                              style="display: none;">
-                            <a href="{{ route("admin.logout") }}"
+                            <a href="{{ route("logout") }}"
                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-yellow-400">Выйти</a>
                         </div>
                     </div>

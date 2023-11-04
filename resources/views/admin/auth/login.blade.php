@@ -1,31 +1,29 @@
-<x-guest-layout>
-    <x-input-error :messages="$errors->get('error')" class="mx-2"/>
+@extends('layouts.app')
 
-    <form method="POST" action="{{ route('admin.login.store') }}">
-        @csrf
+@section('title', 'Авторизация')
 
-        <div>
-            <x-input-label for="username" :value="__('Логин')"/>
-            <x-text-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')"
-                          autofocus/>
-            <x-input-error :messages="$errors->get('username')" class="mt-2"/>
+@section('content')
+    <div class="h-screen bg-gray-100 flex flex-col space-y-10 justify-center items-center">
+        <div class="bg-yellow-400 lg:w-96 shadow-xl rounded p-5">
+            <h1 class="text-3xl text-center font-semibold">{{ __('Вход в панель администратора') }}</h1>
+
+            <form method="POST" action="{{ route("admin.login.store") }}" class="space-y-5 mt-5">
+                @csrf
+
+                <input name="username" type="text" class="w-full h-12 bg-black text-yellow-400 focus:ring-0 focus:ring-offset-0  rounded px-3 @error('email') border-red-500 @enderror" placeholder="Логин" />
+
+                @error('username')
+                <p class="text-red-500">{{ $message }}</p>
+                @enderror
+
+                <input name="password" type="password" class="w-full h-12 bg-black text-yellow-400 focus:ring-0 focus:ring-offset-0 rounded px-3 @error('password') border-red-500 @enderror" placeholder="Пароль" />
+
+                @error('password')
+                <p class="text-red-500">{{ $message }}</p>
+                @enderror
+
+                <button type="submit" class="text-center w-full bg-black rounded-md text-yellow-400 py-3 font-medium">Войти</button>
+            </form>
         </div>
-
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')"/>
-
-            <x-text-input id="password" class="block mt-1 w-full"
-                          type="password"
-                          name="password"
-                          autocomplete="current-password"/>
-
-            <x-input-error :messages="$errors->get('password')" class="mt-2"/>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button class="ml-3">
-                {{ __('Войти') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    </div>
+@endsection
