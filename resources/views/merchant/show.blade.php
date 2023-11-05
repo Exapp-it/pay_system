@@ -10,8 +10,24 @@
             </h3>
             <span
                 class="float-right text-sm font-semibold py-1 px-3 border-2 border-yellow-400 rounded shadow transition duration-300 hover:border-black hover:text-yellow-400">
-            <a href="{{ route('merchant') }}">Назад</a>
-        </span>
+                <a href="{{ route('merchant') }}">Назад</a>
+            </span>
+        </div>
+        <div class="flex items-center mt-5 justify-between">
+            <span class="font-semibold {{ $merchant->activated ? 'text-lime-600' : 'text-red-600' }}">
+                {{ __('Статус') }} - {{ $merchant->activated ? __('Активный') : __('Неактивный') }}
+            </span>
+            <form action="{{ route("merchant.destroy", $merchant->id) }}" method="POST">
+                @csrf
+                <button type="submit"
+                        class="group relative inline-block overflow-hidden border border-red-600 px-8 py-3 focus:outline-none focus:ring">
+                    <span
+                        class="absolute inset-y-0 left-0 w-[2px] bg-red-600 transition-all group-hover:w-full group-active:bg-red-600"></span>
+                    <span class="relative text-sm font-medium text-black transition-colors group-hover:text-black">
+                        {{ __('Удалить') }}
+                    </span>
+                </button>
+            </form>
         </div>
         <div class="flex flex-col mt-8">
             <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
@@ -120,7 +136,7 @@
                     </div>
 
                     <div class="flex justify-center">
-                        @if($merchant->canceled)
+                        @if($merchant->rejected)
                             <div class="flex justify-center m-5">
                                 <span
                                     class="text-xl font-semibold text-red-600 px-10 py-2 border-dashed border-2 border-red-600">
@@ -129,27 +145,40 @@
                             </div>
                         @elseif($merchant->approved && $merchant->activated)
                             <div class="px-2 py-4">
-                                <button type="submit"
-                                        class="group relative inline-block overflow-hidden border border-yellow-400 px-8 py-3 focus:outline-none focus:ring">
+                                <form method="POST" action="{{route('merchant.activate', $merchant->id)}}">
+                                    @csrf
+                                    <button type="submit"
+                                            class="group relative inline-block overflow-hidden border border-red-600 px-8 py-3 focus:outline-none focus:ring">
                                     <span
                                         class="absolute inset-y-0 left-0 w-[2px] bg-red-600 transition-all group-hover:w-full group-active:bg-red-600"></span>
-                                    <span
-                                        class="relative text-sm font-medium text-black transition-colors group-hover:text-black">
+                                        <span
+                                            class="relative text-sm font-medium text-black transition-colors group-hover:text-black">
                                         {{ __('Отключить') }}
                                     </span>
-                                </button>
+                                    </button>
+                                </form>
                             </div>
-                        @elseif($merchant->approved && !$merchant->activated)
+                        @elseif($merchant->approved && !$merchant->activated && !$merchant->banned)
                             <div class="px-2 py-4">
-                                <button type="submit"
-                                        class="group relative inline-block overflow-hidden border border-yellow-400 px-8 py-3 focus:outline-none focus:ring">
+                                <form method="POST" action="{{route('merchant.activate', $merchant->id)}}">
+                                    @csrf
+                                    <button type="submit"
+                                            class="group relative inline-block overflow-hidden border border-yellow-400 px-8 py-3 focus:outline-none focus:ring">
                                     <span
                                         class="absolute inset-y-0 left-0 w-[2px] bg-yellow-400 transition-all group-hover:w-full group-active:bg-yellow-400"></span>
-                                    <span
-                                        class="relative text-sm font-medium text-black transition-colors group-hover:text-black">
+                                        <span
+                                            class="relative text-sm font-medium text-black transition-colors group-hover:text-black">
                                         {{ __('Активировать') }}
                                     </span>
-                                </button>
+                                    </button>
+                                </form>
+                            </div>
+                        @elseif($merchant->banned)
+                            <div class="flex justify-center m-5">
+                                <span
+                                    class="text-xl font-semibold text-red-600 px-10 py-2 border-dashed border-2 border-red-600">
+                                    {{ __('Заблокировано') }}
+                                </span>
                             </div>
                         @else
                             <div class="flex justify-center m-5">
@@ -158,6 +187,7 @@
                                     {{ __('На модерации') }}
                                 </span>
                             </div>
+
                         @endif
                     </div>
                 </div>

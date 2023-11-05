@@ -14,7 +14,10 @@ Route::middleware('admin.auth')->group(function () {
 
     Route::get('merchant', [MerchantController::class, 'index'])->name('admin.merchant');
     Route::get('{id}/merchant', [MerchantController::class, 'show'])->name('admin.merchant.show');
-    Route::put('{id}/approve', [MerchantController::class, 'approve'])->name('admin.merchant.approve');
+    Route::post('{id}/approve', [MerchantController::class, 'approve'])->name('admin.merchant.approve');
+    Route::post('{id}/reject', [MerchantController::class, 'reject'])->name('admin.merchant.reject');
+    Route::post('{id}/block', [MerchantController::class, 'block'])->name('admin.merchant.block');
+    Route::post('{id}/unlock', [MerchantController::class, 'unlock'])->name('admin.merchant.unlock');
 });
 
 Route::middleware('guest:admin')->group(function () {

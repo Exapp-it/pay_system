@@ -43,6 +43,9 @@ class MerchantController extends Controller
     {
         $merchant = Merchant::find($id);
         $merchant->approved = !$merchant->approved;
+        $merchant->activated = true;
+        $merchant->rejected = false;
+        $merchant->banned = false;
         $merchant->save();
 
         return back();
@@ -56,7 +59,35 @@ class MerchantController extends Controller
     public function reject(Request $request, $id): RedirectResponse
     {
         $merchant = Merchant::find($id);
-        $merchant->rejected = !$merchant->rejected;
+        $merchant->rejected = true;
+        $merchant->save();
+
+        return back();
+    }
+
+    /**
+     * @param $id
+     * @return RedirectResponse
+     */
+    public function block($id): RedirectResponse
+    {
+        $merchant = Merchant::find($id);
+        $merchant->activated = false;
+        $merchant->banned = true;
+        $merchant->save();
+
+        return back();
+    }
+
+    /**
+     * @param $id
+     * @return RedirectResponse
+     */
+    public function unlock($id): RedirectResponse
+    {
+        $merchant = Merchant::find($id);
+        $merchant->activated = true;
+        $merchant->banned = false;
         $merchant->save();
 
         return back();

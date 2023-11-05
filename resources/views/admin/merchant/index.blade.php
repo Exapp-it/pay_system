@@ -52,33 +52,19 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                     <div class="text-sm leading-5 text-gray-900">
-                                        @if ($merchant->activated)
-                                            <span
-                                                class="px-3  inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-400 shadow text-black">
-                                                {{ __('Подключен')  }}
-                                            </span>
-                                        @else
-                                            <span
-                                                class="px-3 inline-flex text-xs leading-5 font-semibold rounded-full bg-black shadow text-yellow-400">
-                                                {{ __('Отключен')  }}
-                                            </span>
-                                        @endif
+                                       <span class="px-3 inline-flex text-xs leading-5 font-semibold rounded-full shadow
+                                            {{ $merchant->activated ? 'bg-yellow-400 text-black' : 'bg-black text-yellow-400' }}">
+                                            {{ $merchant->activated ? __('Подключен') : __('Отключен') }}
+                                       </span>
                                     </div>
                                 </td>
 
                                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                     <div class="text-sm leading-5 text-gray-900">
-                                        @if ($merchant->approved)
-                                            <span
-                                                class="px-3 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-400 shadow text-black">
-                                                {{ __('Подтвержден')  }}
-                                            </span>
-                                        @else
-                                            <span
-                                                class="px-3 inline-flex text-xs leading-5 font-semibold rounded-full bg-black shadow text-yellow-400">
-                                                {{ __('На модерации')  }}
-                                            </span>
-                                        @endif
+                                          <span class="px-3 inline-flex text-xs leading-5 font-semibold rounded-full shadow
+                                            {{ $merchant->approved ? 'bg-yellow-400 text-black' : 'bg-black text-yellow-400' }}">
+                                            {{ $merchant->approved ? __('Подтвержден') : __('На модерации') }}
+                                          </span>
                                     </div>
                                 </td>
                             </tr>

@@ -93,29 +93,18 @@
                     <div class="flex justify-center">
                         @if ($merchant->approved)
                             <div class="px-2 py-4">
-                                <form action="{{ route("merchant.update", $merchant->id) }}" method="POST">
+                                <form action="{{ $merchant->banned ? route("admin.merchant.unlock", $merchant->id) : route("admin.merchant.block", $merchant->id) }}" method="POST">
                                     @csrf
-                                    @if ($merchant->banned)
-                                        <button type="submit"
-                                                class="group relative inline-block overflow-hidden border border-yellow-400 px-8 py-3 focus:outline-none focus:ring">
+                                    <button type="submit"
+                                            class="group relative inline-block overflow-hidden border border-yellow-400 px-8 py-3 focus:outline-none focus:ring">
                                         <span
                                             class="absolute inset-y-0 left-0 w-[2px] bg-yellow-400 transition-all group-hover:w-full group-active:bg-yellow-400"></span>
-                                            <span
-                                                class="relative text-sm font-medium text-black  transition-colors group-hover:text-black">
-                                            {{ __('Разблокировать')  }}
-                                        </span>
-                                        </button>
-                                    @else
-                                        <button type="submit"
-                                                class="group relative inline-block overflow-hidden border border-yellow-400 px-8 py-3 focus:outline-none focus:ring">
                                         <span
-                                            class="absolute inset-y-0 left-0 w-[2px] bg-yellow-400 transition-all group-hover:w-full group-active:bg-yellow-400"></span>
-                                            <span
-                                                class="relative text-sm font-medium text-black  transition-colors group-hover:text-black">
-                                            {{ __('Заблокировать')  }}
+                                            class="relative text-sm font-medium text-black transition-colors group-hover:text-black">
+                                            {{ $merchant->banned ? __('Разблокировать') : __('Заблокировать') }}
                                         </span>
-                                        </button>
-                                    @endif
+                                    </button>
+
                                 </form>
 
                             </div>
@@ -123,7 +112,6 @@
                             <div class="px-2 py-4">
                                 <form action="{{ route("admin.merchant.approve", $merchant->id) }}" method="POST">
                                     @csrf
-                                    @method('put')
                                     <button type="submit"
                                             class="group relative inline-block overflow-hidden border border-yellow-400 px-8 py-3 focus:outline-none focus:ring">
                                         <span
@@ -136,7 +124,7 @@
                                 </form>
                             </div>
                             <div class="px-2 py-4">
-                                <form action="{{ route("merchant.update", $merchant->id) }}" method="POST">
+                                <form action="{{ route("admin.merchant.reject", $merchant->id) }}" method="POST">
                                     @csrf
                                     <button type="submit"
                                             class="group relative inline-block overflow-hidden border border-red-500 px-8 py-3 focus:outline-none focus:ring">

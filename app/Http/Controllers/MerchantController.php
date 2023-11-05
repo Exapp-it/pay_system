@@ -58,26 +58,30 @@ class MerchantController extends Controller
         return redirect()->to(route('merchant.show', [$merchant->id]));
     }
 
-    /**
-     * @param $id
-     * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
-     */
-    public function edit($id): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
-    {
-        $merchant = Merchant::where('m_id', $id)->first();
-
-        return view('merchant.edit', ['merchant' => $merchant]);
-    }
 
     /**
-     * @param Request $request
      * @param $id
      * @return RedirectResponse
      */
-    public function update(Request $request, $id): RedirectResponse
+    public function activateOrDeactivate($id): RedirectResponse
     {
-        Merchant::where('m_id', $id)->update(['title' => $request->input('title')]);
+        $merchant = Merchant::find($id);
+        $merchant->activated = !$merchant->activated;
+        $merchant->save();
 
-        return redirect()->route('merchant.edit', [$id]);
+        return back();
     }
+
+    /**
+     * @param $id
+     * @return RedirectResponse
+     */
+    public function destroy($id): RedirectResponse
+    {
+        $merchant = Merchant::find($id);
+        $merchant->delete();
+
+        return redirect()->route('merchant');
+    }
+
 }

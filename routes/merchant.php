@@ -12,8 +12,8 @@ Route::middleware('auth')->group(function () {
     Route::get('{id}/show', [MerchantController::class, 'show'])->name('merchant.show');
     Route::get('create', [MerchantController::class, 'create'])->name('merchant.create');
     Route::post('store', [MerchantController::class, 'store'])->name('merchant.store');
-    Route::get('{id}/edit', [MerchantController::class, 'edit'])->name('merchant.edit');
-    Route::put('{id}/update', [MerchantController::class, 'update'])->name('merchant.update');
+    Route::post('{id}/activate', [MerchantController::class, 'activateOrDeactivate'])->name('merchant.activate');
+    Route::post('{id}/delete', [MerchantController::class, 'destroy'])->name('merchant.destroy');
 });
 
 Route::post('handler', [MerchantHandlerController::class, 'handler'])
