@@ -40,10 +40,16 @@
                         <span class="mx-3">Пользователи</span>
                     </a>
 
+                    <a href="{{ route('admin.ps') }}"
+                       class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
+                       x-bind:class="{'active': currentRoute === 'admin.ps' || currentRoute === 'admin.ps.create'}">
+                        <span class="mx-3">Платежные системы</span>
+                    </a>
+
                     <a href="{{ route('admin.merchant') }}"
                        class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
                        x-bind:class="{'active': currentRoute === 'admin.merchant' || currentRoute === 'admin.merchant.show'}">
-                        <span class="mx-3">Кассы</span>
+                        <span class="mx-3">Магазины</span>
                         @if ($approvedMerchants > 0)
                             <span class="bg-red-700 text-xs font-bold text-white px-2 py-1 rounded-full ml-auto shadow-2xl">
                                 {{$approvedMerchants}}

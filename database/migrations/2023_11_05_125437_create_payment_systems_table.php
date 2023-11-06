@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('payment_systems', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('desc')->nullable();
+            $table->string('url');
+            $table->string('logo');
+            $table->boolean('activated', )->default(true);
             $table->timestamps();
         });
     }

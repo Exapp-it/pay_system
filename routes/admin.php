@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\MerchantController;
+use App\Http\Controllers\Admin\PaymentSystemController;
 use App\Http\Controllers\Admin\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,10 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('{id}/reject', [MerchantController::class, 'reject'])->name('admin.merchant.reject');
     Route::post('{id}/block', [MerchantController::class, 'block'])->name('admin.merchant.block');
     Route::post('{id}/unlock', [MerchantController::class, 'unlock'])->name('admin.merchant.unlock');
+
+    Route::get('pay-systems', [PaymentSystemController::class, 'index'])->name('admin.ps');
+    Route::get('pay-systems/create', [PaymentSystemController::class, 'create'])->name('admin.ps.create');
+    Route::post('pay-systems/store', [PaymentSystemController::class, 'store'])->name('admin.ps.store');
 });
 
 Route::middleware('guest:admin')->group(function () {
