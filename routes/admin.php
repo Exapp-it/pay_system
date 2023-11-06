@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\MerchantController;
 use App\Http\Controllers\Admin\PaymentSystemController;
+use App\Http\Controllers\Admin\PSInfoController;
 use App\Http\Controllers\Admin\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,11 +24,16 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('pay-systems', [PaymentSystemController::class, 'index'])->name('admin.ps');
     Route::get('pay-systems/create', [PaymentSystemController::class, 'create'])->name('admin.ps.create');
     Route::post('pay-systems/store', [PaymentSystemController::class, 'store'])->name('admin.ps.store');
+    Route::get('pay-systems/{id}/edit', [PaymentSystemController::class, 'edit'])->name('admin.ps.edit');
+    Route::post('pay-systems/{id}/update', [PaymentSystemController::class, 'update'])->name('admin.ps.update');
+    Route::post('pay-systems/{id}/change', [PaymentSystemController::class, 'changeStatus'])->name('admin.ps.change');
+    Route::post('pay-system/info', [PaymentSystemController::class, 'info'])->name('admin.ps.info');
+    Route::post('pay-system/info', [PSInfoController::class, 'store'])->name('admin.ps.info.store');
 });
 
 Route::middleware('guest:admin')->group(function () {
-    Route::get('login', [LoginController::class, 'index'])->name('admin.login');
-    Route::post('login', [LoginController::class, 'store'])->name('admin.login.store');
+    Route::get('login', [LoginController::class, 'index'])->name('admin . login');
+    Route::post('login', [LoginController::class, 'store'])->name('admin . login . store');
 });
 
 

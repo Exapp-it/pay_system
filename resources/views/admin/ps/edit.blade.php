@@ -5,7 +5,8 @@
 
 @section('content')
     <div class="container mx-auto px-6 py-8">
-        <h3 class="text-gray-700 text-3xl font-medium">{{ __('Добавление платежной системы') }}
+        <h3 class="text-gray-700 text-3xl font-medium">{{ __('Редактирование платежной системы') }}
+            - {{$paySystem->title}}
             <span
                 class="float-right text-sm font-semibold py-1 px-3 border-2 border-yellow-400 rounded shadow transition duration-300 hover:border-black hover:text-yellow-400">
             <a href="{{ route('admin.ps') }}">Назад</a>
@@ -13,7 +14,7 @@
         </h3>
         <div class="flex flex-col mt-8">
             <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-                <form action="{{route('admin.ps.store')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{route('admin.ps.update', $paySystem->id)}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div
                         class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
@@ -24,7 +25,7 @@
                                     <input type="text"
                                            name="title"
                                            id="title"
-                                           value="{{ old('title') }}"
+                                           value="{{ $paySystem->title }}"
                                            class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"/>
                                     <span
                                         class="absolute start-0 top-2 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs">
@@ -43,7 +44,7 @@
                                     <input type="text"
                                            name="url"
                                            id="url"
-                                           value="{{ old('url') }}"
+                                           value="{{ $paySystem->url }}"
                                            class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"/>
                                     <span
                                         class="absolute start-0 top-2 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs">
@@ -66,22 +67,22 @@
                                     {{ __('Описание') }}
                                     </span>
                                     <textarea name="desc" id="desc"
-                                              class="peer  h-8 w-full overflow-y-auto border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"></textarea>
-
+                                              class="peer h-8 w-full overflow-y-auto border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm">{{$paySystem->desc}}</textarea>
                                 </label>
                                 @error('desc')
                                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                                 @enderror
                             </div>
-
                             <div x-data="{ imageUrl: '', imageUploaded: false }"
                                  class="flex items-center space-x-6 px-2 py-4 lg:w-1/2">
-                                <div class="shrink-0" x-show="imageUploaded">
-                                    <img x-bind:src="imageUrl" class="w-20 object-cover rounded"
-                                         alt="Current profile photo"/>
+                                <div class="shrink-0">
+                                    <img x-show="imageUploaded" x-bind:src="imageUrl"
+                                         class="w-20 object-cover rounded" alt="Payment System Logo"/>
+                                    <img x-show="!imageUploaded" src="{{asset('storage/' . $paySystem->logo)}}"
+                                         class="w-20 object-cover rounded" alt="Payment System Logo"/>
                                 </div>
                                 <label class="block">
-                                    <span class="sr-only">{{ __('Выберите логотпи')  }}</span>
+                                    <span class="sr-only">{{ __('Выберите логотип') }}</span>
                                     <input type="file"
                                            name="logo"
                                            x-on:change="imageUploaded = true; imageUrl = URL.createObjectURL($event.target.files[0])"
@@ -91,7 +92,6 @@
                                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                                 @enderror
                             </div>
-
                         </div>
                         <div class="flex justify-center">
                             <div class="px-2 py-4">
@@ -101,7 +101,7 @@
                                             class="absolute inset-y-0 left-0 w-[2px] bg-yellow-400 transition-all group-hover:w-full group-active:bg-yellow-400"></span>
                                     <span
                                         class="relative text-sm font-medium text-black  transition-colors group-hover:text-black">
-                                            {{ __('Добавить')  }}
+                                            {{ __('Сохранить')  }}
                                         </span>
                                 </button>
                             </div>

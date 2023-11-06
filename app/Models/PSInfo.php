@@ -4,23 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class PaymentSystem extends Model
+class PSInfo extends Model
 {
     use HasFactory;
-
 
     /**
      * @var string[]
      */
     protected $fillable = [
         'title',
-        'desc',
-        'url',
-        'logo',
+        'value',
         'activated',
     ];
+
 
     /**
      * @var string[]
@@ -29,11 +27,13 @@ class PaymentSystem extends Model
         'activated' => 'boolean',
     ];
 
+
     /**
-     * @return HasMany
+     * @return BelongsTo
      */
-    public function infos(): HasMany
+    public function paymentSystem(): BelongsTo
     {
-        return $this->hasMany(PSInfo::class, 'ps_id');
+        return $this->belongsTo(PaymentSystem::class, 'ps_id');
     }
+
 }

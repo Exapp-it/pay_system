@@ -12,7 +12,7 @@ class MerchantService
     /**
      * @param Request|null $request
      */
-    public function __construct(private readonly ?Request $request = null)
+    public function __construct(public readonly ?Request $request = null)
     {
     }
 
@@ -62,9 +62,9 @@ class MerchantService
     {
         $data = [
             $merchant->m_id,
-            $this->request->input('order'),
-            $this->request->input('amount'),
-            $this->request->input('currency'),
+            $this->request->post('order'),
+            $this->request->post('amount'),
+            $this->request->post('currency'),
             $merchant->m_key,
         ];
 
@@ -74,7 +74,9 @@ class MerchantService
         return strtoupper($hashedValue);
     }
 
+
     /**
+     * @param int $length
      * @return int
      */
     protected function generateId(int $length = 12): int

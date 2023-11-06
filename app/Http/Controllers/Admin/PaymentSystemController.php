@@ -3,16 +3,30 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\PaymentSystem;
+use App\Services\FileUploadService;
+use App\Services\PaymentSystemService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class PaymentSystemController extends Controller
 {
-    public function index()
+    /**
+     * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+     */
+    public function index(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('admin.ps.index');
+        $paySystems = PaymentSystem::all();
+
+        return view('admin.ps.index', ['paySystems' => $paySystems]);
+    }
+
+    public function info()
+    {
+
     }
 
     /**
@@ -23,19 +37,49 @@ class PaymentSystemController extends Controller
         return view('admin.ps.create');
     }
 
-    public function store(Request $request)
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function store(Request $request): RedirectResponse
     {
-        $data = $request->all();
+        $service = new PaymentSystemService($request);
+        $service->validate()->create();
 
-        if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            $fileName = time() . '_' . $file->getClientOriginalName();
-            $file->storeAs('public/payment_systems', $fileName);
-            $data['logo'] = $fileName;
-        }
-        dd($data);
+        return redirect()->route('admin.ps');
+    }
 
-        return back()->with('success', 'Данные успешно сохранены.');
+    /**
+     * @param $id
+     * @return RedirectResponse
+     */
+    public function changeStatus($id): RedirectResponse
+    {
+        $paySystem = PaymentSystem::find($id);
+        $paySystem->activated = !$paySystem->activated;
+        $paySystem->save();
+
+        return back();
+    }
+
+    /**
+     * @param $id
+     * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+     */
+    public function edit($id): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $paySystem = PaymentSystem::find($id);
+
+        return view('admin.ps.edit', ['paySystem' => $paySystem]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $service = new PaymentSystemService($request);
+        $service->update((int)$id);
+
+        return back();
+
     }
 
 }
