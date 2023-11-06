@@ -13,7 +13,7 @@
         </h3>
         <div class="flex flex-col mt-8">
             <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-                <form action="{{route('merchant.store')}}" method="POST">
+                <form action="{{route('admin.ps.store')}}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div
                         class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">

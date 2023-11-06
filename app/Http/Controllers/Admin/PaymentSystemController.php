@@ -25,6 +25,17 @@ class PaymentSystemController extends Controller
 
     public function store(Request $request)
     {
-        dd($request);
+        $data = $request->all();
+
+        if ($request->hasFile('logo')) {
+            $file = $request->file('logo');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->storeAs('public/payment_systems', $fileName);
+            $data['logo'] = $fileName;
+        }
+        dd($data);
+
+        return back()->with('success', 'Данные успешно сохранены.');
     }
+
 }
