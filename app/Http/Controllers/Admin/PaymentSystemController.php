@@ -26,7 +26,9 @@ class PaymentSystemController extends Controller
 
     public function info()
     {
+        $paySystems = PaymentSystem::all();
 
+        return view('admin.ps.info', ['paySystems' => $paySystems]);
     }
 
     /**

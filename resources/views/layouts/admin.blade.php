@@ -31,32 +31,47 @@
                     <a href="{{ route('admin') }}"
                        class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
                        x-bind:class="{'active': currentRoute === 'admin'}">
-                        <span class="mx-3">Главная</span>
+                        <span class="mx-3">{{ __('Главная')  }}</span>
                     </a>
 
                     <a href="{{ route('admin.users') }}"
                        class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
                        x-bind:class="{'active': currentRoute === 'admin.users'}">
-                        <span class="mx-3">Пользователи</span>
-                    </a>
-
-                    <a href="{{ route('admin.ps') }}"
-                       class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
-                       x-bind:class="{'active': currentRoute === 'admin.ps' || currentRoute === 'admin.ps.create'}">
-                        <span class="mx-3">Платежные системы</span>
+                        <span class="mx-3">{{ __('Пользователи')  }}</span>
                     </a>
 
                     <a href="{{ route('admin.merchant') }}"
                        class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
                        x-bind:class="{'active': currentRoute === 'admin.merchant' || currentRoute === 'admin.merchant.show'}">
-                        <span class="mx-3">Магазины</span>
+                        <span class="mx-3">{{ __('Магазины')  }}</span>
                         @if ($approvedMerchants > 0)
-                            <span class="bg-red-700 text-xs font-bold text-white px-2 py-1 rounded-full ml-auto shadow-2xl">
+                            <span
+                                class="bg-red-700 text-xs font-bold text-white px-2 py-1 rounded-full ml-auto shadow-2xl">
                                 {{$approvedMerchants}}
                             </span>
                         @endif
+                    </a>
 
+                    <a href="{{ route('admin.ps') }}"
+                       class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
+                       x-bind:class="{'active': currentRoute === 'admin.ps' || currentRoute === 'admin.ps.create'}">
+                        <span class="mx-3">{{ __('Платежные системы')  }}</span>
+                    </a>
 
+                    <a href="{{ route('admin.ps.info') }}"
+                       class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
+                       x-bind:class="{'active':
+                         currentRoute === 'admin.ps.info' ||
+                         currentRoute === 'admin.ps.info.create' ||
+                         currentRoute === 'admin.ps.info.show'
+                         }">
+                        <span class="mx-3">{{ __('Реквизиты')  }}</span>
+                    </a>
+
+                    <a href="{{ route('admin.ps') }}"
+                       class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
+                       x-bind:class="{'active': currentRoute === '' || currentRoute === ''}">
+                        <span class="mx-3">{{ __('Выплаты')  }}</span>
                     </a>
 
                     <a href="#"
@@ -64,8 +79,6 @@
                        x-bind:class="{'active': currentRoute === ''}">
                         <span class="mx-3">Настройки</span>
                     </a>
-
-
                 </div>
             </nav>
         </div>

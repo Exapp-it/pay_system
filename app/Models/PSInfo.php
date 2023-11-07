@@ -14,6 +14,7 @@ class PSInfo extends Model
      * @var string[]
      */
     protected $fillable = [
+        'ps_id',
         'title',
         'value',
         'activated',

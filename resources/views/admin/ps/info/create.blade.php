@@ -1,19 +1,19 @@
 @extends('layouts.admin')
 
-@section('title', 'Платежные системы')
+@section('title', 'Реквизиты')
 
 
 @section('content')
     <div class="container mx-auto px-6 py-8">
-        <h3 class="text-gray-700 text-3xl font-medium">{{ __('Добавление платежной системы') }}
+        <h3 class="text-gray-700 text-3xl font-medium">{{ __('Добавление реквизитов') }}
             <span
                 class="float-right text-sm font-semibold py-1 px-3 border-2 border-yellow-400 rounded shadow transition duration-300 hover:border-black hover:text-yellow-400">
-            <a href="{{ route('admin.ps') }}">Назад</a>
+            <a href="{{ route('admin.ps.info') }}">Назад</a>
         </span>
         </h3>
         <div class="flex flex-col mt-8">
             <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
-                <form action="{{route('admin.ps.store')}}" method="POST" enctype="multipart/form-data">
+                <form action="{{route('admin.ps.info.store')}}" method="POST">
                     @csrf
                     <div
                         class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
@@ -38,56 +38,41 @@
                             </div>
 
                             <div class="px-2 py-4 lg:w-1/2">
-                                <label for="url"
+                                <label for="value"
                                        class="relative block overflow-hidden border-b border-gray-200 bg-transparent pt-3 focus-within:border-blue-600">
                                     <input type="text"
-                                           name="url"
-                                           id="url"
-                                           value="{{ old('url') }}"
+                                           name="value"
+                                           id="value"
+                                           value="{{ old('value') }}"
                                            class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"/>
                                     <span
                                         class="absolute start-0 top-2 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs">
-                                    {{ __('Домен') }}
+                                    {{ __('Реквизит')  }}
                                     </span>
                                 </label>
-                                @error('url')
+                                @error('value')
                                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                                 @enderror
 
                             </div>
                         </div>
-                        <div class="lg:flex">
-                            <div class="px-2 py-4 lg:w-1/2">
-                                <label for="desc"
-                                       class="relative block overflow-hidden border-b border-gray-200 bg-transparent pt-5
-                                focus-within:border-blue-600">
-                                    <span
-                                        class="absolute start-0 top-2 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs">
-                                    {{ __('Описание') }}
-                                    </span>
-                                    <textarea name="desc" id="desc"
-                                              class="peer  h-8 w-full overflow-y-auto border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"></textarea>
-
+                        <div class="flex justify-center">
+                            <div class="px-2 py-4 w-full lg:w-1/2 inline-flex justify-center items-center gap-4">
+                                <label for="ps_id" class="block text-sm font-medium text-gray-900">
+                                    {{ __('Платежная система')  }}
                                 </label>
-                                @error('desc')
-                                <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
-                                @enderror
-                            </div>
 
-                            <div x-data="{ imageUrl: '', imageUploaded: false }"
-                                 class="flex items-center space-x-6 px-2 py-4 lg:w-1/2">
-                                <div class="shrink-0" x-show="imageUploaded">
-                                    <img x-bind:src="imageUrl" class="w-20 object-cover rounded"
-                                         alt="Current profile photo"/>
-                                </div>
-                                <label class="block">
-                                    <span class="sr-only">{{ __('Выберите логотпи')  }}</span>
-                                    <input type="file"
-                                           name="logo"
-                                           x-on:change="imageUploaded = true; imageUrl = URL.createObjectURL($event.target.files[0])"
-                                           class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-1 file:border-yellow-400 file:text-sm file:font-semibold file:bg-yellow-50 file:text-black hover:file:bg-yellow-400 file:cursor-pointer"/>
-                                </label>
-                                @error('logo')
+                                <select
+                                    name="ps_id"
+                                    id="ps_id"
+                                    class="mt-1.5 w-1/2 rounded-lg border-gray-300 text-gray-700 sm:text-sm"
+                                >
+                                    <option value="">{{ __('Выберите платежную систему') }}</option>
+                                    @foreach($paySystems as $paySystem)
+                                        <option value="{{$paySystem->id}}">{{$paySystem->title}}</option>
+                                    @endforeach
+                                </select>
+                                @error('ps_id')
                                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                                 @enderror
                             </div>

@@ -27,13 +27,21 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('pay-systems/{id}/edit', [PaymentSystemController::class, 'edit'])->name('admin.ps.edit');
     Route::post('pay-systems/{id}/update', [PaymentSystemController::class, 'update'])->name('admin.ps.update');
     Route::post('pay-systems/{id}/change', [PaymentSystemController::class, 'changeStatus'])->name('admin.ps.change');
-    Route::post('pay-system/info', [PaymentSystemController::class, 'info'])->name('admin.ps.info');
-    Route::post('pay-system/info', [PSInfoController::class, 'store'])->name('admin.ps.info.store');
+
+
+    Route::get('pay-system/info', [PSInfoController::class, 'index'])->name('admin.ps.info');
+    Route::get('pay-system/{id}/info', [PSInfoController::class, 'show'])->name('admin.ps.info.show');
+    Route::get('pay-system/info/create', [PSInfoController::class, 'create'])->name('admin.ps.info.create');
+    Route::post('pay-system/info/create', [PSInfoController::class, 'store'])->name('admin.ps.info.store');
+    Route::post('pay-system/{id}/info/change', [PSInfoController::class, 'change'])->name('admin.ps.info.change');
+    Route::post('pay-system/{id}/info/delete', [PSInfoController::class, 'destroy'])->name('admin.ps.info.delete');
+    Route::get('pay-system/{id}/info/edit', [PSInfoController::class, 'edit'])->name('admin.ps.info.edit');
+    Route::post('pay-system/{id}/info/update', [PSInfoController::class, 'update'])->name('admin.ps.info.update');
 });
 
 Route::middleware('guest:admin')->group(function () {
-    Route::get('login', [LoginController::class, 'index'])->name('admin . login');
-    Route::post('login', [LoginController::class, 'store'])->name('admin . login . store');
+    Route::get('login', [LoginController::class, 'index'])->name('admin.login');
+    Route::post('login', [LoginController::class, 'store'])->name('admin.login.store');
 });
 
 

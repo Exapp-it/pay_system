@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\PaymentSystem;
+use App\Models\PSInfo;
 use App\Services\FileUploadService;
 use Illuminate\Http\Request;
 
@@ -21,12 +22,25 @@ class PaymentSystemService
     public function validate(): static
     {
         $this->request->validate([
-            'title' => 'required', 'string',
-            'url' => 'required', 'url',
-            'desc' => 'required', 'string',
-            'logo' => 'required', 'image', 'mimes:jpeg,png,jpg,gif',
+            'title' => ['required', 'string'],
+            'url' => ['required', 'url'],
+            'desc' => ['required', 'string'],
+            'logo' => ['required', 'image', 'mimes:jpeg,png,jpg,gif'],
         ]);
 
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function validateInfo(): static
+    {
+        $this->request->validate([
+            'ps_id' => ['required', 'exists:payment_systems,id'],
+            'title' => ['required'],
+            'value' => ['required'],
+        ]);
         return $this;
     }
 
@@ -43,6 +57,15 @@ class PaymentSystemService
             'desc' => $this->request->post('desc'),
             'url' => $this->request->post('url'),
             'logo' => $fileUpload->getFileName(),
+        ]);
+    }
+
+    public function createInfo()
+    {
+        PSInfo::create([
+            'ps_id' => intval($this->request->post('ps_id')),
+            'title' => $this->request->post('title'),
+            'value' => $this->request->post('value'),
         ]);
     }
 

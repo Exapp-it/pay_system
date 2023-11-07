@@ -6,8 +6,7 @@
 @section('content')
     <div class="container mx-auto px-6 py-8">
         <h3 class="text-gray-700 text-3xl font-medium">{{ __('Платежные системы')  }}</h3>
-
-        <div class="mt-8">
+        <div class="my-8">
             <a href="{{ route("admin.ps.create") }}"
                class="bg-yellow-400 hover:bg-black hover:text-yellow-400 text-black font-bold py-2 px-4 rounded transition duration-300">
                 {{ __('Добавить платежную систему') }}
@@ -44,16 +43,16 @@
                                     <button
                                         class="group relative inline-block text-sm font-medium text-white focus:outline-none focus:ring">
                                         <span
-                                            class="absolute inset-0 border border-{{ $paySystem->activated ? 'red-600' : 'lime-600' }} group-active:border-{{ $paySystem->activated ? 'red-500' : 'lime-500' }}"></span>
+                                            class="absolute inset-0 border group-active:border-{{ $paySystem->activated ? 'red-500' : 'lime-500' }}"></span>
                                         <span
-                                            class="block border border-{{ $paySystem->activated ? 'red-600' : 'lime-600' }} bg-{{ $paySystem->activated ? 'red-600' : 'lime-600' }} px-2 py-1 transition-transform active:border-{{ $paySystem->activated ? 'red-500' : 'lime-500' }} active:bg-{{ $paySystem->activated ? 'red-500' : 'lime-500' }} group-hover:-translate-x-1 group-hover:-translate-y-1">
-                                                {{ $paySystem->activated ? __('Выкл') : __('Вкл') }}
-                                            </span>
+                                            class="block border bg-{{ $paySystem->activated ? 'red-600' : 'lime-600' }} px-2 py-1 transition-transform active:bg-{{ $paySystem->activated ? 'red-500' : 'lime-500' }} group-hover:-translate-x-1 group-hover:-translate-y-1">
+                                            {{ $paySystem->activated ? __('Выкл') : __('Вкл') }}
+                                        </span>
                                     </button>
                                 </form>
 
                                 <a href="{{route('admin.ps.edit', $paySystem->id)}}"
-                                   class="group relative cursor-pointer inline-block text-sm font-medium text-white focus:outline-none focus:ring">
+                                   class="group relative cursor-pointer inline-block text-sm font-medium text-black focus:outline-none focus:ring">
                                     <span
                                         class="absolute inset-0 border border-yellow-400 group-active:border-yellow-300"></span>
                                     <span
@@ -62,8 +61,8 @@
                                     </span>
                                 </a>
 
-                                <a
-                                    class="group relative cursor-pointer inline-block text-sm font-medium text-white focus:outline-none focus:ring">
+                                <a href="{{route('admin.ps.info.show', $paySystem->id)}}"
+                                   class="group relative cursor-pointer inline-block text-sm font-medium text-white focus:outline-none focus:ring">
                                     <span
                                         class="absolute inset-0 border border-blue-400 group-active:border-blue-300"></span>
                                     <span

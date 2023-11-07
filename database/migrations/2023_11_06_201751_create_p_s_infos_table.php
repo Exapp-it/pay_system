@@ -18,6 +18,8 @@ return new class extends Migration {
             $table->string('value');
             $table->boolean('activated')->default(true);
 
+            $table->bigInteger('usage_count')->unsigned()->default(0);
+
             $table->timestamps();
 
             $table->foreign('ps_id')
