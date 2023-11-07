@@ -7,6 +7,10 @@
     .active {
         @apply bg-yellow-400  text-black shadow-md
     }
+
+    .dashboard-active-link {
+        @apply text-gold-100
+    }
 }
 
 

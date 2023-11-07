@@ -6,9 +6,9 @@
     <div class="container mx-auto px-6 py-8">
         <h3 class="text-gray-700 text-3xl font-medium">{{ __('Список магазин')  }}</h3>
 
-        <div class="mt-8">
+        <div class="my-8">
             <a href="{{ route("merchant.create") }}"
-               class="bg-yellow-400 hover:bg-black hover:text-yellow-400 text-black font-bold py-2 px-4 rounded transition duration-300">
+               class="bg-gold-300 hover:bg-black hover:text-gold-300 text-black font-bold py-2 px-4 rounded transition duration-300">
                 {{ __('Подключить магазин') }}
             </a>
         </div>
@@ -55,7 +55,7 @@
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                         <div class="text-sm leading-5 text-gray-900">
                                             <span class="px-3 inline-flex text-xs leading-5 font-semibold rounded-full shadow
-                                                {{ $merchant->activated ? 'bg-yellow-400 text-black' : 'bg-black text-yellow-400' }}">
+                                                {{ $merchant->activated ? 'bg-gold-300 text-black' : 'bg-black text-gold-300' }}">
                                                 {{ $merchant->activated ? __('Подключен') : __('Отключен') }}
                                             </span>
                                         </div>
@@ -65,7 +65,7 @@
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                         <div class="text-sm leading-5 text-gray-900">
                                           <span class="px-3 inline-flex text-xs leading-5 font-semibold rounded-full shadow
-                                            {{ $merchant->approved ? 'bg-yellow-400 text-black' : 'bg-black text-yellow-400' }}">
+                                            {{ $merchant->approved ? 'bg-gold-300 text-black' : 'bg-black text-gold-300' }}">
                                             {{ $merchant->approved && !$merchant->rejected ? __('Подтвержден') : __('На модерации') }}
                                           </span>
                                         </div>
