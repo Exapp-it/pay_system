@@ -51,7 +51,7 @@
                 </div>
                 <div class="">
                     <h3 class="text-gray-700 text-xl my-5 font-medium">{{ __('Выберите платежную систему') }}</h3>
-                    <form method="post" action="">
+                    <form method="post" action="{{route('api.create', $paymentId)}}">
                         @csrf
                         <div class="flex flex-wrap justify-between items-center gap-4">
                             @foreach($paymentSystems as $paymentSystem)
@@ -82,6 +82,9 @@
                                     </div>
                                 </label>
                             @endforeach
+                                @error('payment_system')
+                                <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+                                @enderror
                         </div>
                         <div class="mt-4">
                             <button type="submit"

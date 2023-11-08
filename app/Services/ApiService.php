@@ -43,7 +43,7 @@ class ApiService
      */
     public function verifyHash(): bool
     {
-        return $this->getHash($this->merchant) === $this->request->post('signature');
+        return $this->getHash($this->merchant) === $this->request->post('signature') || $this->request->get('signature');
     }
 
     /**
@@ -81,17 +81,19 @@ class ApiService
         return strtoupper($hashedValue);
     }
 
+
     /**
+     * @param mixed $paymentSystem
      * @return mixed
      */
-    public function createPayment(): mixed
+    public function createPayment(mixed $paymentSystem = 1): mixed
     {
         return Payment::create([
             'm_id' => $this->merchant->m_id,
-            'amount' => $this->request->post('amount'),
-            'currency' => $this->request->post('currency'),
-            'order' => $this->request->post('order'),
-            'payment_system' => 'p2p',
+            'amount' => $this->request->get('amount'),
+            'currency' => $this->request->get('currency'),
+            'order' => $this->request->get('order'),
+            'payment_system' => $paymentSystem,
         ]);
     }
 

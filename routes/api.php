@@ -12,5 +12,8 @@ Route::post('', [ApiController::class, 'handler'])
 Route::get('', [ApiController::class, 'index'])
     ->name('api');
 
+Route::post('create/{id}', [ApiController::class, 'create'])
+    ->name('api.create');
+
 
 Route::get('test', [TestController::class, 'test'])->name('merchant.test');

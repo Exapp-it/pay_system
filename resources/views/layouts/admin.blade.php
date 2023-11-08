@@ -77,6 +77,12 @@
                     <a href="#"
                        class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
                        x-bind:class="{'active': currentRoute === ''}">
+                        <span class="mx-3">{{ __('Платежи')  }}</span>
+                    </a>
+
+                    <a href="#"
+                       class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
+                       x-bind:class="{'active': currentRoute === ''}">
                         <span class="mx-3">Настройки</span>
                     </a>
                 </div>
