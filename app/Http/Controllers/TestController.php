@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class TestController extends Controller
+class  TestController extends Controller
 {
     public function test(): void
     {
@@ -28,7 +28,7 @@ class TestController extends Controller
         $signature = strtoupper($hashedValue);
 
         echo(
-            '<form method="post" action="' . route('merchant.handler') . '">
+            '<form method="post" action="http://127.0.0.1:8000/api">
                 <input type="text" name="shop" value="' . $shop . '">
                 <input type="text" name="order" value="' . $order . '">
                 <input type="text" name="amount" value="' . $amount . '">

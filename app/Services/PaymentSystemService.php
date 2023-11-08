@@ -6,6 +6,7 @@ use App\Models\PaymentSystem;
 use App\Models\PSInfo;
 use App\Services\FileUploadService;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PaymentSystemService
 {
@@ -26,6 +27,7 @@ class PaymentSystemService
             'url' => ['required', 'url'],
             'desc' => ['required', 'string'],
             'logo' => ['required', 'image', 'mimes:jpeg,png,jpg,gif'],
+            'currency' => ['required', Rule::in(config('payment.currencies'))],
         ]);
 
         return $this;
@@ -57,6 +59,7 @@ class PaymentSystemService
             'desc' => $this->request->post('desc'),
             'url' => $this->request->post('url'),
             'logo' => $fileUpload->getFileName(),
+            'currency' => $this->request->post('currency'),
         ]);
     }
 

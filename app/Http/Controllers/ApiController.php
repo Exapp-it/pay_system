@@ -3,35 +3,52 @@
 namespace App\Http\Controllers;
 
 use App\Models\Merchant;
-use App\Services\MerchantHandlerService;
+use App\Models\PaymentSystem;
+use App\Services\ApiService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class MerchantHandlerController extends Controller
+class ApiController extends Controller
 {
+
+    public function index(Request $request)
+    {
+        $merchant = Merchant::approvedAndActivated()
+            ->where('m_id', $request->get('shop'))
+            ->first();
+
+        $service = new ApiService($request, $merchant);
+
+        if (!$service->merchantExists()) {
+            return back()->with(['message' => __('Merchant not found')]);
+        }
+
+        $paymentSystems = PaymentSystem::query()
+            ->where('currency', $request->only('currency'))
+            ->where('activated', true)
+            ->get();
+
+
+        return view('api.index', [
+            'data' => (object)$request->only('order', 'amount', 'currency'),
+            'paymentSystems' => $paymentSystems,
+            'shop' => $merchant,
+        ]);
+    }
+
     /**
      * @param Request $request
      * @return JsonResponse|string
      */
     public function handler(Request $request): \Illuminate\Http\JsonResponse|string
     {
+
         $merchant = Merchant::approvedAndActivated()
             ->where('m_id', $request->post('shop'))
             ->first();
 
-        $service = new MerchantHandlerService($request, $merchant);
 
-        $service->validate();
-
-        if (!$service->merchantExists()) {
-            return $this->respondError('MerchantMiddleware not found');
-        }
-
-        if (!$service->verifyHash()) {
-            return $this->respondError('Hash no verified');
-        }
-
-        return '1';
+        return redirect()->route('api', $service->getData());
     }
 
     /**
@@ -66,7 +83,21 @@ class MerchantHandlerController extends Controller
         return response()->json([
             'status' => 'error',
             'message' => $message,
-            'data' => [],
         ]);
+    }
+
+    private function check(Request $request, Merchant $merchant)
+    {
+        $service = new ApiService($request, $merchant);
+
+        $service->validate();
+
+        if (!$service->merchantExists()) {
+            return $this->respondError(__('Merchant not found'));
+        }
+
+        if (!$service->verifyHash()) {
+            return $this->respondError(__('Hash no verified'));
+        }
     }
 }

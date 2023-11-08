@@ -22,6 +22,7 @@ class User extends Authenticatable
     protected $fillable = [
         'username',
         'email',
+        'balance',
         'password',
         'is_active'
     ];
@@ -53,5 +54,13 @@ class User extends Authenticatable
     public function merchants(): HasMany
     {
         return $this->hasMany(Merchant::class, 'user_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function withdrawals(): HasMany
+    {
+        return $this->hasMany(Withdrawal::class, 'user_id');
     }
 }

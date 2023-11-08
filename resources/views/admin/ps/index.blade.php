@@ -28,10 +28,14 @@
                         </div>
 
                         <div>
-                            <strong
-                                class="rounded border border-yellow-400 bg-yellow-540 px-3 py-1.5 text-[12px] font-medium text-black">
+                            <span
+                                class="rounded border border-yellow-400 bg-yellow-400 px-3 py-1.5 text-[14px] font-bold text-black">
                                 {{__($paySystem->title)}}
-                            </strong>
+                            </span>
+                            <span
+                                class="rounded-full border ml-5 border-sky-400 bg-sky-600 px-3 py-1.5 text-[12px] font-bold text-white">
+                                {{__($paySystem->currency)}}
+                            </span>
 
                             <h3 class="mt-4 text-sm font-medium">
                                 <p>  {{ __($paySystem->desc) }} </p>

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,7 +12,27 @@ return new class extends Migration
     {
         Schema::create('withdrawals', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('payment_system')->unsigned();
+
+            $table->decimal('amount');
+            $table->string('currency');
+
+            $table->boolean('approved')->default(false);
+            $table->boolean('canceled')->default(false);
+
             $table->timestamps();
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users');
+
+            $table->foreign('payment_system')
+                ->references('id')
+                ->on('payment_systems');
+
+            $table->index('user_id');
+            $table->index('payment_system');
         });
     }
 

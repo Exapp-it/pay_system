@@ -24,12 +24,6 @@ class PaymentSystemController extends Controller
         return view('admin.ps.index', ['paySystems' => $paySystems]);
     }
 
-    public function info()
-    {
-        $paySystems = PaymentSystem::all();
-
-        return view('admin.ps.info', ['paySystems' => $paySystems]);
-    }
 
     /**
      * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application

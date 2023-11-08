@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\MerchantHandlerController;
+use App\Http\Controllers\ApiController;
 use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 

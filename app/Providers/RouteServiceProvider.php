@@ -29,9 +29,9 @@ class RouteServiceProvider extends ServiceProvider
             });
 
             Route::middleware('web')
-                ->prefix('merchant')
+                ->prefix('api')
                 ->group(function () {
-                    require base_path('routes/merchant.php');
+                    require base_path('routes/api.php');
                 });
 
             Route::middleware('web')

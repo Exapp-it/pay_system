@@ -8,7 +8,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 
 
-class MerchantHandlerService
+class ApiService
 {
 
     /**
@@ -54,6 +54,13 @@ class MerchantHandlerService
         return (bool)$this->merchant;
     }
 
+    /**
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->request->only(['shop', 'order', 'amount', 'currency']);
+    }
 
     /**
      * @return string

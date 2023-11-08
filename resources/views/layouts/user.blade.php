@@ -32,37 +32,46 @@
             </div>
 
 
-            <nav class="mt-10">
+            <nav class="mt-10 text-sm">
                 <div x-data="{ currentRoute: '{{ request()->route()->getName() }}' }">
 
                     <a href="{{ route('dashboard') }}"
-                       class="text-gold-300  mt-4 transition duration-300 hover:bg-gold-300/25 hover:text-gold-100 hover:shadow-md"
+                       class="text-gold-300 flex justify-center mt-4 transition duration-300 hover:bg-gold-300/25 hover:text-gold-100 hover:shadow-md text-left"
                        x-bind:class="{'text-gold-100': currentRoute === 'dashboard'}">
-                        <span class="py-3 text-left">Главная</span>
+                        <span class="py-3">Главная</span>
                     </a>
-
 
                     <a href="{{ route('merchant') }}"
-                       class="text-gold-300 flex items-center justify-center mt-4 transition duration-300 hover:bg-gold-300/25 hover:text-gold-100 hover:shadow-md"
+                       class="text-gold-300 flex justify-center mt-4 transition duration-300 hover:bg-gold-300/25 hover:text-gold-100 hover:shadow-md text-left"
                        x-bind:class="{'text-gold-100': currentRoute === 'merchant'}">
-                        <span class="py-3 text-left">{{ __('Мои магазины')  }}</span>
+                        <span class="py-3">{{ __('Мои магазины') }}</span>
                     </a>
 
-                    <a href="#"
-                       class="text-gold-300 flex items-center justify-center mt-4 transition duration-300 hover:bg-gold-300/25 hover:text-gold-100 hover:shadow-md"
+                    <a href="{{route('user.withdrawal.create')}}"
+                       class="text-gold-300 flex justify-center mt-4 transition duration-300 hover:bg-gold-300/25 hover:text-gold-100 hover:shadow-md text-left"
                        x-bind:class="{'text-gold-100': currentRoute === ''}">
-                        <span class="py-3">{{ __('Вывод средств')  }}</span>
+                        <span class="py-3">{{ __('Вывод средств') }}</span>
                     </a>
 
                     <a href="#"
-                       class="text-gold-300 flex items-center justify-center mt-4 transition duration-300 hover:bg-gold-300/25 hover:text-gold-100 hover:shadow-md"
+                       class="text-gold-300 flex justify-center mt-4 transition duration-300 hover:bg-gold-300/25 hover:text-gold-100 hover:shadow-md text-left"
                        x-bind:class="{'dashboard-active-link': currentRoute === ''}">
                         <span class="py-3">Настройки</span>
                     </a>
 
+                    <form class="flex justify-center" action="{{ route("logout") }}" method="POST">
+                        @csrf
+                        <button type="submit"
+                           class="text-gold-300 flex justify-center w-full mt-4 transition duration-300 hover:bg-gold-300/25 hover:text-gold-100 hover:shadow-md text-left"
+                           x-bind:class="{'dashboard-active-link': currentRoute === ''}">
+                            <span class="py-3">Выход</span>
+                        </button>
+                    </form>
 
                 </div>
             </nav>
+
+
         </div>
 
         <div class="flex-1 flex flex-col overflow-hidden">

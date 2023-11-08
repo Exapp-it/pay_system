@@ -17,7 +17,7 @@
                     @csrf
                     <div
                         class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-                        <div class="lg:flex">
+                        <div class="lg:flex items-center">
                             <div class="px-2 py-4 lg:w-1/2">
                                 <label for="title"
                                        class="relative block overflow-hidden border-b border-gray-200 bg-transparent pt-3 focus-within:border-blue-600">
@@ -53,7 +53,25 @@
                                 @error('url')
                                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                                 @enderror
+                            </div>
+                            <div class="px-2 py-4">
+                                <label for="currency" class="block text-sm font-medium text-gray-900">
+                                    {{ __('Валюта')  }}
+                                </label>
 
+                                <select
+                                    name="currency"
+                                    id="currency"
+                                    class="rounded-lg border-gray-300 text-gray-700 sm:text-sm"
+                                >
+                                    <option value="">{{ __('Выберите валюту') }}</option>
+                                    @foreach(config('payment.currencies') as $currency)
+                                        <option value="{{$currency}}">{{$currency}}</option>
+                                    @endforeach
+                                </select>
+                                @error('currency')
+                                <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
                         <div class="lg:flex">

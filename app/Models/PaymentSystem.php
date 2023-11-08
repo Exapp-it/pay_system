@@ -19,6 +19,7 @@ class PaymentSystem extends Model
         'desc',
         'url',
         'logo',
+        'currency',
         'activated',
     ];
 
@@ -35,5 +36,13 @@ class PaymentSystem extends Model
     public function infos(): HasMany
     {
         return $this->hasMany(PSInfo::class, 'ps_id');
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function withdrawals(): HasMany
+    {
+        return $this->hasMany(Withdrawal::class, 'payment_system');
     }
 }

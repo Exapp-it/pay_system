@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('desc')->nullable();
             $table->string('url');
             $table->string('logo');
+            $table->string('currency');
             $table->boolean('activated', )->default(true);
             $table->timestamps();
         });
