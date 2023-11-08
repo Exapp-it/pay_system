@@ -14,7 +14,7 @@
                  class="text-center border border-gold-50 px-5 py-6 my-5 rounded-lg shadow-xl">
                 <p class="text-sm font-semibold">
                     {{__('Вы должны совершить перевод в течение')}}
-                    <span x-text="formatTime" class="text-gold-400 font-bold"></span>
+                    <span x-text="$store.timer.formatTime" class="text-gold-400 font-bold"></span>
                     {{__(' минут и указать точную сумму, иначе операция не будет выполнен.')}}
                 </p>
                 <p class="text-sm text-red-500 mt-2">{{__('Пожалуйста, не закрывайте страницу и не обновляйте её до завершения операции.')}}</p>
@@ -74,7 +74,7 @@
                                    readonly
                             />
 
-                            <button @click="copy(copyDetails)"
+                            <button @click="$store.copy(copyDetails)"
                                     class="absolute right-2 top-2 cursor-pointer text-gold-500 hover:underline">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -118,7 +118,7 @@
                                    class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
                                    readonly
                             />
-                            <button @click="copy(copyAmount)"
+                            <button @click="$store.copy(copyAmount)"
                                     class="absolute right-2 top-2 cursor-pointer text-gold-500 hover:underline">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -199,11 +199,7 @@
                     </button>
                 </div>
             </div>
-
-
         </div>
-
-
     </div>
 
 @endsection

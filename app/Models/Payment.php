@@ -39,11 +39,7 @@ class Payment extends Model
         return $this->belongsTo(Merchant::class, 'm_id', 'm_id');
     }
 
-    /**
-     * @return HasOne
-     */
-    public function transaction(): HasOne
-    {
-        return $this->hasOne(Transaction::class, 'p_id', 'id');
-    }
+
+
+
 }

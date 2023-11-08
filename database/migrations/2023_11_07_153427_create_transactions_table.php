@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,22 +12,24 @@ return new class extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('p_id')->unsigned();
+            $table->bigInteger('m_id')->unsigned();
 
             $table->decimal('amount');
             $table->string('currency');
+            $table->string('type');
 
             $table->boolean('confirmed')->default(false);
             $table->boolean('canceled')->default(false);
 
             $table->timestamps();
 
-            $table->foreign('p_id')
+            $table->foreign('m_id')
                 ->references('id')
-                ->on('payments');
+                ->on('merchants');
 
             $table->index('id');
-            $table->index('p_id');
+            $table->index('m_id');
+            $table->index('type');
         });
     }
 

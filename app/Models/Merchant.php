@@ -23,6 +23,7 @@ class Merchant extends Model
         'success_url',
         'fail_url',
         'handler_url',
+        'percent',
         'm_id',
         'm_key',
         'approved',
@@ -59,6 +60,13 @@ class Merchant extends Model
         return $this->hasMany(Payment::class, 'm_id', 'm_id');
     }
 
+    /**
+     * @return HasMany
+     */
+    public function transactions(): HasMany
+    {
+        return $this->hasMany(Transaction::class, 'm_id');
+    }
 
     /**
      * @param $query

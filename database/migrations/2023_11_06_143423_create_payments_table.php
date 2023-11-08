@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('currency');
             $table->string('order');
 
-            $table->bigInteger('payment_system')->unsigned();
+            $table->bigInteger('payment_system')->unsigned()->nullable();
             $table->string('pay_screen')->nullable();
 
             $table->boolean('approved')->default(false);

@@ -14,7 +14,7 @@ class Transaction extends Model
      * @var string[]
      */
     protected $fillable = [
-        'p_id',
+        'm_id',
         'amount',
         'currency',
         'confirmed',
@@ -29,11 +29,13 @@ class Transaction extends Model
         'canceled' => 'boolean',
     ];
 
+
     /**
      * @return BelongsTo
      */
-    public function payment(): BelongsTo
+    public function merchant(): BelongsTo
     {
-        return $this->belongsTo(Payment::class, 'p_id', 'id');
+        return $this->belongsTo(Merchant::class, 'm_id');
     }
+
 }

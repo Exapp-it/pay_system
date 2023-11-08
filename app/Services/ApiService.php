@@ -11,15 +11,10 @@ use Illuminate\Http\Request;
 class ApiService
 {
 
-    /**
-     * @var Merchant|null
-     */
-    protected ?Merchant $merchant = null;
-
-
-    public function __construct(private readonly ?Request $request, ?Merchant $merchant = null)
+    public function __construct(
+        public readonly Request  $request,
+        public readonly Merchant $merchant)
     {
-        $this->merchant = $merchant;
     }
 
 
@@ -54,13 +49,6 @@ class ApiService
         return (bool)$this->merchant;
     }
 
-    /**
-     * @return array
-     */
-    public function getData(): array
-    {
-        return $this->request->only(['shop', 'order', 'amount', 'currency']);
-    }
 
     /**
      * @return string
@@ -79,59 +67,6 @@ class ApiService
         $hashedValue = hash('sha256', $hashString);
 
         return strtoupper($hashedValue);
-    }
-
-
-    /**
-     * @param mixed $paymentSystem
-     * @return mixed
-     */
-    public function createPayment(mixed $paymentSystem = 1): mixed
-    {
-        return Payment::create([
-            'm_id' => $this->merchant->m_id,
-            'amount' => $this->request->get('amount'),
-            'currency' => $this->request->get('currency'),
-            'order' => $this->request->get('order'),
-            'payment_system' => $paymentSystem,
-        ]);
-    }
-
-    /**
-     * @param $payment
-     * @return mixed
-     */
-    public function addTransaction($payment): mixed
-    {
-        return Transaction::create([
-            'p_id' => $payment->id,
-            'amount' => $payment->amount,
-            'currency' => $payment->currency,
-        ]);
-    }
-
-    /**
-     * @param Transaction $transaction
-     * @return array
-     */
-    public function transactionMapping(Transaction $transaction): array
-    {
-        $payment = $transaction->payment()->first();
-
-        return [
-            'status' => 'success',
-            'message' => 'ok',
-            'data' => [
-                'operation_id' => $transaction->id,
-                'operation_pay_system' => $payment->payment_system,
-                'operation_date' => $transaction->created_at->format('Y-m-d H:i:s'),
-                'operation_pay_date' => $transaction->updated_at->format('Y-m-d H:i:s'),
-                'shop' => $payment->m_id,
-                'amount' => $transaction->amount,
-                'order' => $payment->order,
-                'currency' => $transaction->currency,
-            ],
-        ];
     }
 
 

@@ -52,7 +52,6 @@ class MerchantController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $service = new MerchantService($request);
-
         $merchant = $service->validate()->create();
 
         return redirect()->to(route('merchant.show', [$merchant->id]));

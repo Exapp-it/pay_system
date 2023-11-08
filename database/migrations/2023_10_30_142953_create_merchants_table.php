@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('fail_url');
             $table->string('handler_url');
 
+            $table->decimal('percent')->default(config('payment.percent.default'));
+
             $table->boolean('approved')->default(false);
             $table->boolean('rejected')->default(false);
             $table->boolean('activated')->default(false);

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Merchant;
 use App\Models\Payment;
 use App\Models\PaymentSystem;
+use App\Models\Transaction;
 use App\Services\ApiService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -26,7 +27,6 @@ class ApiController extends Controller
             ->first();
 
         $service = new ApiService($request, $merchant);
-
         $service->validate();
 
         if (!$service->merchantExists()) {
@@ -43,7 +43,12 @@ class ApiController extends Controller
             ->get();
 
 
-        $paymentId = $service->createPayment();
+        $paymentId = Payment::create([
+            'm_id' => $merchant->m_id,
+            'amount' => $request->get('amount'),
+            'currency' => $request->get('currency'),
+            'order' => $request->get('order'),
+        ]);
 
 
         return view('api.index', [
@@ -54,7 +59,12 @@ class ApiController extends Controller
         ]);
     }
 
-    public function create(Request $request, $id)
+    /**
+     * @param Request $request
+     * @param $id
+     * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+     */
+    public function pay(Request $request, $id): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $request->validate([
             'payment_system' => ['required'],
@@ -72,7 +82,14 @@ class ApiController extends Controller
             return $carry;
         }, null);
 
-        return view('api.create', [
+        Transaction::create([
+            'm_id' => $payment->merchant->id,
+            'amount' => $payment->amount,
+            'currency' => $payment->currency,
+            'type' => 'payIn',
+        ]);
+
+        return view('api.pay', [
             'paymentSystem' => $paymentSystem,
             'details' => $details,
             'payment' => $payment,
@@ -83,7 +100,7 @@ class ApiController extends Controller
      * @param Request $request
      * @return JsonResponse|string
      */
-    public function handler(Request $request): \Illuminate\Http\JsonResponse|string
+    public function handler(Request $request): JsonResponse|string
     {
 
         $merchant = Merchant::approvedAndActivated()
@@ -106,33 +123,10 @@ class ApiController extends Controller
     }
 
     /**
-     * @param $transaction
-     * @return JsonResponse
-     */
-    private function respondSuccess($transaction): \Illuminate\Http\JsonResponse
-    {
-        $payment = $transaction->payment()->first();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'ok',
-            'data' => [
-                'operation_id' => $transaction->id,
-                'operation_pay_system' => $payment->payment_system,
-                'operation_date' => $transaction->created_at->format('Y-m-d H:i:s'),
-                'operation_pay_date' => $transaction->updated_at->format('Y-m-d H:i:s'),
-                'shop' => $payment->m_id,
-                'amount' => $transaction->amount,
-                'currency' => $transaction->currency,
-            ]
-        ]);
-    }
-
-    /**
      * @param $message
      * @return JsonResponse
      */
-    private function respondError($message): \Illuminate\Http\JsonResponse
+    private function respondError($message): JsonResponse
     {
         return response()->json([
             'status' => 'error',
