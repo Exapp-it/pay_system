@@ -29,6 +29,12 @@
                                     {{ __('Название')  }}
                                 </th>
                                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ __('Баланс')  }}
+                                </th>
+                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                    {{ __('Комиссия')  }}
+                                </th>
+                                <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                     {{ __('Статус')  }}
                                 </th>
                                 <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
@@ -50,6 +56,22 @@
 
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                         <div class="text-sm leading-5 text-gray-900">{{ $merchant->title }}</div>
+                                    </td>
+
+                                    <td class="font-semibold px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <div class="text-sm leading-5 text-gray-900">
+                                            <p>
+                                                {{ $merchant->balance }}  {{config('payment.default_currency')}}
+                                            </p>
+                                        </div>
+                                    </td>
+
+                                    <td class="font-semibold px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                        <div class="text-sm leading-5 text-gray-900">
+                                            <p>
+                                                {{ $merchant->percent }} %
+                                            </p>
+                                        </div>
                                     </td>
 
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">

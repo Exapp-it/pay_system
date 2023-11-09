@@ -5,12 +5,13 @@ return [
     'default_currency' => 'AZN',
 
     'currencies' => [
-        'USD',
-        'RUB',
-        'EUR',
+        'AZN', 'BNB', 'BTC',
+        'DOGE', 'LTC', 'RUB',
+        'TRX', 'USDT', 'USD',
     ],
 
+
     'percent' => [
-        'default' => 0.02
+        'default' => 2.00,
     ],
 ];

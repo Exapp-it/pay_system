@@ -16,6 +16,7 @@ class Transaction extends Model
     protected $fillable = [
         'm_id',
         'amount',
+        'type',
         'currency',
         'confirmed',
         'canceled',

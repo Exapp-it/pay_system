@@ -7,11 +7,13 @@ use App\Models\Payment;
 use App\Models\PaymentSystem;
 use App\Models\Transaction;
 use App\Services\ApiService;
+use App\Services\FileUploadService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class ApiController extends Controller
 {
@@ -70,7 +72,7 @@ class ApiController extends Controller
             'payment_system' => ['required'],
         ]);
 
-        $paymentSystem = PaymentSystem::find($request->post('payment_system'));
+        $paymentSystem = PaymentSystem::find($request->get('payment_system'));
         $payment = Payment::find($id);
         $payment->payment_system = $paymentSystem->id;
         $payment->save();
@@ -82,12 +84,6 @@ class ApiController extends Controller
             return $carry;
         }, null);
 
-        Transaction::create([
-            'm_id' => $payment->merchant->id,
-            'amount' => $payment->amount,
-            'currency' => $payment->currency,
-            'type' => 'payIn',
-        ]);
 
         return view('api.pay', [
             'paymentSystem' => $paymentSystem,
@@ -105,7 +101,7 @@ class ApiController extends Controller
 
         $merchant = Merchant::approvedAndActivated()
             ->where('m_id', $request->post('shop'))
-            ->first();
+            ->firstOrFail();
 
         $service = new ApiService($request, $merchant);
 
@@ -123,10 +119,42 @@ class ApiController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param $id
+     * @return JsonResponse
+     */
+    public function payHandler(Request $request, $id): JsonResponse
+    {
+        try {
+            $request->validate([
+                'order' => ['required', 'image', 'mimes:jpeg,png,jpg,gif'],
+            ]);
+            $fileUpload = new FileUploadService($request->file('order'), 'orders');
+            $fileUpload->upload();
+            $payment = Payment::find($id);
+            $payment->pay_screen = $fileUpload->getFileName();
+            $payment->save();
+
+            $transaction = Transaction::create([
+                'm_id' => $payment->merchant->id,
+                'amount' => $payment->amount,
+                'currency' => $payment->currency,
+                'type' => 'payIn',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->json($e->errors(), 422);
+        }
+
+        return response()->json(['message' => 'Success'], 200);
+    }
+
+
+    /**
      * @param $message
      * @return JsonResponse
      */
-    private function respondError($message): JsonResponse
+    private
+    function respondError($message): JsonResponse
     {
         return response()->json([
             'status' => 'error',

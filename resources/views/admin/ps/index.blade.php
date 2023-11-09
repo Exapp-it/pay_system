@@ -15,7 +15,7 @@
         <div class="flex flex-wrap justify-center px-5 py-5 gap-4 lg:gap-20">
             @foreach($paySystems as $paySystem)
                 <div
-                    class="rounded-xl w-full  shadow-2xl md:w-1/2 lg:w-1/2 xl:w-1/3 bg-white p-4 ring ring-yellow-50 sm:p-6 lg:p-8">
+                    class="rounded-xl w-full shadow-2xl md:w-1/2 xl:w-1/3 bg-white p-4 ring ring-yellow-50 sm:p-6 lg:p-8">
                     <div class="flex items-start sm:gap-8">
                         <div
                             class="hidden sm:grid sm:h-20 sm:w-20 sm:shrink-0 sm:place-content-center"

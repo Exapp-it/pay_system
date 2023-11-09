@@ -29,6 +29,9 @@ Route::middleware('admin.auth')->group(function () {
     Route::post('{id}/approve', [MerchantController::class, 'approve'])
         ->name('admin.merchant.approve');
 
+    Route::post('{id}/percent', [MerchantController::class, 'percent'])
+        ->name('admin.merchant.percent');
+
     Route::post('{id}/reject', [MerchantController::class, 'reject'])
         ->name('admin.merchant.reject');
 

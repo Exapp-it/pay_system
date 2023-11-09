@@ -21,14 +21,16 @@ class Payment extends Model
         'order',
         'payment_system',
         'pay_screen',
-        'moderation',
+        'approved',
+        'canceled',
     ];
 
     /**
      * @var string[]
      */
     protected $casts = [
-        'moderation' => 'boolean',
+        'approved' => 'boolean',
+        'canceled' => 'boolean',
     ];
 
     /**
@@ -38,8 +40,4 @@ class Payment extends Model
     {
         return $this->belongsTo(Merchant::class, 'm_id', 'm_id');
     }
-
-
-
-
 }

@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('username')->unique();
             $table->string('email')->unique();
-            $table->decimal('balance')->default(0);
             $table->string('telegram')->nullable();
             $table->string('password');
             $table->boolean('is_active')->default(true);

@@ -22,6 +22,7 @@ return new class extends Migration {
             $table->string('pay_screen')->nullable();
 
             $table->boolean('approved')->default(false);
+            $table->boolean('canceled')->default(false);
             $table->timestamps();
 
             $table->foreign('m_id')

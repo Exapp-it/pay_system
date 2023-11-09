@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -24,6 +23,7 @@ return new class extends Migration
             $table->string('fail_url');
             $table->string('handler_url');
 
+            $table->decimal('balance')->default(0);
             $table->decimal('percent')->default(config('payment.percent.default'));
 
             $table->boolean('approved')->default(false);

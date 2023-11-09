@@ -7,6 +7,7 @@ window.Alpine = Alpine;
 
 Alpine.store('timer', timer)
 Alpine.store('copy', copy)
+Alpine.store('formActive', {formActive: true})
 
 
 Alpine.start();

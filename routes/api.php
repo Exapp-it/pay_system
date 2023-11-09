@@ -12,8 +12,11 @@ Route::post('', [ApiController::class, 'handler'])
 Route::get('', [ApiController::class, 'index'])
     ->name('api');
 
-Route::post('pay/{id}', [ApiController::class, 'pay'])
+Route::get('pay/{id}', [ApiController::class, 'pay'])
     ->name('api.pay');
+
+Route::post('pay/{id}/handler', [ApiController::class, 'payHandler'])
+    ->name('api.pay.handler');
 
 
 Route::get('test', [TestController::class, 'test'])->name('merchant.test');

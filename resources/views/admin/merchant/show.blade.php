@@ -89,11 +89,41 @@
                             </label>
                         </div>
                     </div>
+                    <div class="lg:flex">
+                        <div class="px-2 py-4 lg:w-1/3">
+                            <form action="{{route('admin.merchant.percent', $merchant->id)}}" method="POST">
+                                @csrf
+                                <label for="percent"
+                                       class="relative block overflow-hidden border-b border-gray-200 bg-transparent pt-3 focus-within:border-blue-600">
+                                    <input type="text" name="percent" id="percent" value="{{ $merchant->percent  }}"
+                                           class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"/>
+                                    <span
+                                        class="absolute start-0 top-2 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs">
+                                    {{ __('Установить индивидуальную комиссию') }}
+                                </span>
+                                    <button type="submit"
+                                            class="absolute right-2 top-2 cursor-pointer text-yellow-400 hover:underline">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                             stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zm-7.518-.267A8.25 8.25 0 1120.25 10.5M8.288 14.212A5.25 5.25 0 1117.25 10.5"/>
+                                        </svg>
+
+                                    </button>
+                                </label>
+                                @error('percent')
+                                <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
+                                @enderror
+                            </form>
+                        </div>
+                    </div>
 
                     <div class="flex justify-center">
                         @if ($merchant->approved)
                             <div class="px-2 py-4">
-                                <form action="{{ $merchant->banned ? route("admin.merchant.unlock", $merchant->id) : route("admin.merchant.block", $merchant->id) }}" method="POST">
+                                <form
+                                    action="{{ $merchant->banned ? route("admin.merchant.unlock", $merchant->id) : route("admin.merchant.block", $merchant->id) }}"
+                                    method="POST">
                                     @csrf
                                     <button type="submit"
                                             class="group relative inline-block overflow-hidden border border-yellow-400 px-8 py-3 focus:outline-none focus:ring">

@@ -92,4 +92,16 @@ class MerchantController extends Controller
 
         return back();
     }
+
+    public function percent(Request $request, $id): RedirectResponse
+    {
+        $request->validate([
+            'percent' => ['required', 'numeric'],
+        ]);
+        $merchant = Merchant::find($id);
+        $merchant->percent = $request->post('percent');
+        $merchant->save();
+
+        return back();
+    }
 }

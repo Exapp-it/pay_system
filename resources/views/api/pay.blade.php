@@ -3,7 +3,8 @@
 @section('title', 'Оплата')
 
 @section('content')
-    <div class="container mx-auto px-6 py-8 lg:w-3/4">
+    <div class="container mx-auto px-6 py-8 lg:w-3/4" xmlns:x-bind="http://www.w3.org/1999/xhtml"
+         xmlns:x-on="http://www.w3.org/1999/xhtml">
         <div class="lg:flex items-center justify-between">
             <h3 class="inline-block text-gray-700 text-2xl border-b-2 border-gold-300 font-medium">{{ __('Оплата счета') }}</h3>
         </div>
@@ -153,22 +154,40 @@
                 </div>
                 <div class="pt-1 pb-8">
                     <p class="mb-2 text-xl font-bold text-gray-900">{{__('Пожалуйста, прикрепите квитанцию о переводе.')}}</p>
-                    <div x-data="{ imageUrl: '', imageUploaded: false }"
-                         class="flex flex-wrap items-center space-x-6 px-2 py-4">
-                        <div class="shrink-0" x-show="imageUploaded">
-                            <img x-bind:src="imageUrl" class="w-36 object-cover rounded"
-                                 alt="Current profile photo"/>
+                    <div x-data="{ image: '', formActive: true}">
+                        <form @submit.prevent="uploadImage">
+                            <div class="flex flex-wrap items-center space-x-6 px-2 py-4">
+                                <div class="shrink-0" x-show="image instanceof Blob">
+                                    <img x-bind:src="image ? URL.createObjectURL(image) : null"
+                                         class="w-36 object-cover rounded"
+                                         alt="Order"/>
+                                </div>
+                                <label class="block">
+                                    <input type="file" name="order"
+                                           :disabled="!formActive"
+                                           x-on:change="image = $event.target.files[0];"
+                                           class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-1 file:border-yellow-400 file:text-sm file:font-semibold file:bg-yellow-50 file:text-black hover:file:bg-yellow-400 file:cursor-pointer"
+                                           accept="image/*"/>
+                                </label>
+                                <div class="text-red-500 text-xs mt-2" id="errorMessage"></div>
+
+                            </div>
+                            <button type="submit"
+                                    :disabled="!formActive"
+                                    class="group relative mt-5 inline-block overflow-hidden border border-gold-400 px-8 py-3 focus:outline-none focus:ring">
+                        <span
+                            class="absolute inset-y-0 left-0 w-[2px] bg-gold-400 transition-all group-hover:w-full group-active:bg-gold-400"></span>
+                                <span
+                                    class="relative text-sm font-medium text-black transition-colors group-hover:text-black">
+                            {{ __('Я Оплатил') }}
+                        </span>
+                            </button>
+
+                        </form>
+                        <div class="flex flex-col mt-5" x-show="!formActive">
+                            <img class="w-72 h-auto" src="{{asset('storage/img/loader.gif')}}" alt="">
+                            <p class="text-gold-600 font-semibold">{{__('Подождите, пока платеж будет подтвержден...')}}</p>
                         </div>
-                        <label class="block">
-                            <span class="sr-only">{{ __('Выберите логотпи')  }}</span>
-                            <input type="file"
-                                   name="logo"
-                                   x-on:change="imageUploaded = true; imageUrl = URL.createObjectURL($event.target.files[0])"
-                                   class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-1 file:border-yellow-400 file:text-sm file:font-semibold file:bg-yellow-50 file:text-black hover:file:bg-yellow-400 file:cursor-pointer"/>
-                        </label>
-                        @error('logo')
-                        <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
-                        @enderror
                     </div>
                 </div>
             </div>
@@ -189,17 +208,62 @@
                     </div>
                 </div>
                 <div class="pt-1">
-                    <button type="submit"
-                            class="group relative inline-block overflow-hidden border border-gold-400 px-8 py-3 focus:outline-none focus:ring">
-                        <span
-                            class="absolute inset-y-0 left-0 w-[2px] bg-gold-400 transition-all group-hover:w-full group-active:bg-gold-400"></span>
-                        <span class="relative text-sm font-medium text-black  transition-colors group-hover:text-black">
-                            {{ __('Я Оплатил')  }}
-                        </span>
-                    </button>
+
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function uploadImage() {
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+            const errorMessageElement = document.getElementById('errorMessage');
+            errorMessageElement.textContent = ''
+
+
+            const formData = new FormData();
+            formData.append('order', this.image);
+
+            fetch('{{ route('api.pay.handler', $payment->id) }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+            })
+                .then(response => {
+                    this.formActive = false;
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            // Если есть поле "order" в errorData, извлекаем сообщение об ошибке
+                            if (errorData.order && errorData.order.length > 0) {
+                                throw new Error(errorData.order[0]);
+                            } else {
+                                throw new Error('Произошла ошибка валидации');
+                            }
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Обработка успешного ответа от сервера
+                    console.log(data);
+                    setInterval(sendRepeatRequest, 1000);
+                    // Вы можете здесь выполнить дополнительные действия с данными
+                })
+                .catch(error => {
+                    // Обработка ошибок
+                    errorMessageElement.textContent = error.message;
+                    this.formActive = true;
+                });
+        }
+
+        function sendRepeatRequest() {
+            // Ваш код для отправки повторных запросов
+            console.log('Отправка повторного запроса...');
+            // Вы можете повторно отправить запрос к серверу
+        }
+    </script>
 
 @endsection

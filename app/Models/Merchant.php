@@ -23,6 +23,7 @@ class Merchant extends Model
         'success_url',
         'fail_url',
         'handler_url',
+        'balance',
         'percent',
         'm_id',
         'm_key',
