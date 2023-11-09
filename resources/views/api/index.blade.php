@@ -51,7 +51,8 @@
                 </div>
                 <div class="">
                     <h3 class="text-gray-700 text-xl my-5 font-medium">{{ __('Выберите платежную систему') }}</h3>
-                    <form method="GET" action="{{route('api.pay', $paymentId)}}">
+                    <form method="POST" action="{{route('api.pay')}}">
+                        @csrf
                         <div class="flex flex-wrap justify-between items-center gap-4">
                             @foreach($paymentSystems as $paymentSystem)
                                 <label class="cursor-pointer">

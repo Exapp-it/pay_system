@@ -12,7 +12,9 @@ return new class extends Migration {
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
+
             $table->bigInteger('m_id')->unsigned();
+
 
             $table->decimal('amount');
             $table->string('currency');
@@ -28,6 +30,7 @@ return new class extends Migration {
             $table->foreign('m_id')
                 ->references('m_id')
                 ->on('merchants');
+
 
             $table->foreign('payment_system')
                 ->references('id')

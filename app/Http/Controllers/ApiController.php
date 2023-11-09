@@ -25,57 +25,46 @@ class ApiController extends Controller
     public function index(Request $request): View|Application|Factory|JsonResponse|\Illuminate\Contracts\Foundation\Application
     {
         $merchant = Merchant::approvedAndActivated()
-            ->where('m_id', $request->get('shop'))
+            ->where('m_id', $request->session()->get('shop'))
             ->first();
 
-        $service = new ApiService($request, $merchant);
-        $service->validate();
-
-        if (!$service->merchantExists()) {
-            return $this->respondError(__('Merchant not found'));
-        }
-
-        if (!$service->verifyHash()) {
-            return $this->respondError(__('Hash no verified'));
-        }
+        $request->session()->put(['data' => $request->only('order', 'amount', 'currency')]);
 
         $paymentSystems = PaymentSystem::query()
             ->where('currency', $request->only('currency'))
             ->where('activated', true)
             ->get();
 
-
-        $paymentId = Payment::create([
-            'm_id' => $merchant->m_id,
-            'amount' => $request->get('amount'),
-            'currency' => $request->get('currency'),
-            'order' => $request->get('order'),
-        ]);
-
-
         return view('api.index', [
             'data' => (object)$request->only('order', 'amount', 'currency'),
-            'paymentId' => $paymentId,
             'paymentSystems' => $paymentSystems,
             'shop' => $merchant,
         ]);
     }
+
 
     /**
      * @param Request $request
      * @param $id
      * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
      */
-    public function pay(Request $request, $id): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function pay(Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
         $request->validate([
             'payment_system' => ['required'],
         ]);
 
+        $data = (object)$request->session()->get('data');
+
         $paymentSystem = PaymentSystem::find($request->get('payment_system'));
-        $payment = Payment::find($id);
-        $payment->payment_system = $paymentSystem->id;
-        $payment->save();
+
+        $payment = Payment::create([
+            'm_id' => $request->session()->get('shop'),
+            'amount' => $data->amount,
+            'currency' => $data->currency,
+            'order' => $data->order,
+            'payment_system' => $paymentSystem->id,
+        ]);
 
         $details = $paymentSystem->infos->reduce(function ($carry, $info) {
             if ($carry === null || $info->usage_count < $carry->usage_count) {
@@ -92,31 +81,6 @@ class ApiController extends Controller
         ]);
     }
 
-    /**
-     * @param Request $request
-     * @return JsonResponse|string
-     */
-    public function handler(Request $request): JsonResponse|string
-    {
-
-        $merchant = Merchant::approvedAndActivated()
-            ->where('m_id', $request->post('shop'))
-            ->firstOrFail();
-
-        $service = new ApiService($request, $merchant);
-
-        $service->validate();
-
-        if (!$service->merchantExists()) {
-            return $this->respondError(__('Merchant not found'));
-        }
-
-        if (!$service->verifyHash()) {
-            return $this->respondError(__('Hash no verified'));
-        }
-
-        return redirect()->route('api', $request->all());
-    }
 
     /**
      * @param Request $request
@@ -129,8 +93,10 @@ class ApiController extends Controller
             $request->validate([
                 'order' => ['required', 'image', 'mimes:jpeg,png,jpg,gif'],
             ]);
+
             $fileUpload = new FileUploadService($request->file('order'), 'orders');
             $fileUpload->upload();
+
             $payment = Payment::find($id);
             $payment->pay_screen = $fileUpload->getFileName();
             $payment->save();
@@ -140,7 +106,9 @@ class ApiController extends Controller
                 'amount' => $payment->amount,
                 'currency' => $payment->currency,
                 'type' => 'payIn',
+                'payment_id' => $payment->id,
             ]);
+            $request->session()->put('transaction', $transaction->id);
         } catch (ValidationException $e) {
             return response()->json($e->errors(), 422);
         }
@@ -149,16 +117,13 @@ class ApiController extends Controller
     }
 
 
-    /**
-     * @param $message
-     * @return JsonResponse
-     */
-    private
-    function respondError($message): JsonResponse
+    public function payConfirm(Request $request)
     {
+        //$request->session()->flush();
         return response()->json([
-            'status' => 'error',
-            'message' => $message,
-        ]);
+            'message' => 'Success',
+            'data' => $request->session()->get('transaction')
+        ], 200);
     }
+
 }

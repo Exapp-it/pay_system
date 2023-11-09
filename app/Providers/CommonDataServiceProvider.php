@@ -20,7 +20,7 @@ class CommonDataServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        view()->share('approvedMerchants', Merchant::where('approved', false)
+        view()->share('newMerchants', Merchant::where('approved', false)
             ->where('rejected', false)
             ->count());
     }

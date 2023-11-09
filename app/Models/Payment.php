@@ -40,4 +40,20 @@ class Payment extends Model
     {
         return $this->belongsTo(Merchant::class, 'm_id', 'm_id');
     }
+
+    /**
+     * @return BelongsTo
+     */
+    public function system(): BelongsTo
+    {
+        return $this->belongsTo(PaymentSystem::class, 'payment_system');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function Transaction(): HasOne
+    {
+        return $this->hasOne(Transaction::class, 'payment_id');
+    }
 }

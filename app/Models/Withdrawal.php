@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Withdrawal extends Model
 {
@@ -44,5 +45,13 @@ class Withdrawal extends Model
     public function paymentSystem(): BelongsTo
     {
         return $this->belongsTo(PaymentSystem::class, 'payment_system');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function Transaction(): HasOne
+    {
+        return $this->hasOne(Transaction::class, 'withdrawal_id');
     }
 }

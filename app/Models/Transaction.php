@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Transaction extends Model
 {
@@ -15,6 +16,8 @@ class Transaction extends Model
      */
     protected $fillable = [
         'm_id',
+        'payment_id',
+        'withdrawal_id',
         'amount',
         'type',
         'currency',
@@ -37,6 +40,22 @@ class Transaction extends Model
     public function merchant(): BelongsTo
     {
         return $this->belongsTo(Merchant::class, 'm_id');
+    }
+
+    /**
+     * @return HasOne
+     */
+    public function payment(): HasOne
+    {
+        return $this->hasOne(Payment::class, 'payment_id');
+    }
+
+    /**
+     * @return HasOne
+     */
+    protected function withdrawal(): HasOne
+    {
+        return $this->hasOne(Withdrawal::class, 'withdrawal_id');
     }
 
 }

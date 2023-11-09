@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\MerchantController;
+use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PaymentSystemController;
 use App\Http\Controllers\Admin\PSInfoController;
 use App\Http\Controllers\Admin\UsersController;
@@ -84,6 +85,9 @@ Route::middleware('admin.auth')->group(function () {
 
     Route::post('pay-system/{id}/info/update', [PSInfoController::class, 'update'])
         ->name('admin.ps.info.update');
+
+    Route::get('payments', [PaymentController::class, 'index'])
+        ->name('admin.payments');
 });
 
 Route::middleware('guest:admin')->group(function () {

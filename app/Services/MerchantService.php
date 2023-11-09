@@ -37,10 +37,10 @@ class MerchantService
      */
     public function create(): mixed
     {
-        $baseUrl = rtrim($this->request->input('base_url'), '/');
-        $successUrl = $baseUrl . '/' . $this->request->input('success_url');
-        $failUrl = $baseUrl . '/' . $this->request->input('fail_url');
-        $handlerUrl = $baseUrl . '/' . $this->request->input('handler_url');
+        $baseUrl = rtrim($this->request->post('base_url'), '/');
+        $successUrl = $baseUrl . '/' . $this->request->post('success_url');
+        $failUrl = $baseUrl . '/' . $this->request->post('fail_url');
+        $handlerUrl = $baseUrl . '/' . $this->request->post('handler_url');
 
         return Merchant::create([
             'user_id' => $this->request->user()->id,

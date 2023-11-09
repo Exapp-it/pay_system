@@ -12,7 +12,10 @@ return new class extends Migration {
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+
             $table->bigInteger('m_id')->unsigned();
+            $table->unsignedBigInteger('payment_id')->nullable();
+            $table->unsignedBigInteger('withdrawal_id')->nullable();
 
             $table->decimal('amount');
             $table->string('currency');
@@ -27,8 +30,18 @@ return new class extends Migration {
                 ->references('id')
                 ->on('merchants');
 
+            $table->foreign('payment_id')
+                ->references('id')
+                ->on('payments');
+
+            $table->foreign('withdrawal_id')
+                ->references('id')
+                ->on('withdrawals');
+
             $table->index('id');
             $table->index('m_id');
+            $table->index('payment_id');
+            $table->index('withdrawal_id');
             $table->index('type');
         });
     }
