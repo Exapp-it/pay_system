@@ -2,12 +2,18 @@
 
 
 return [
-    'default_currency' => 'AZN',
+    'default_currency' => [
+        'name' => 'AZN',
+    ],
 
     'currencies' => [
-        'AZN', 'BNB', 'BTC',
-        'DOGE', 'LTC', 'RUB',
-        'TRX', 'USDT', 'USD',
+        'fiat' => [
+            'AZN', 'RUB', 'USD',
+        ],
+        'crypto' => [
+            'BNB', 'BTC', 'DOGE',
+            'LTC', 'TRX', 'USDT',
+        ],
     ],
 
 

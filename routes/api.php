@@ -16,11 +16,14 @@ Route::get('', [ApiController::class, 'index'])
 Route::post('pay', [ApiController::class, 'pay'])
     ->name('api.pay');
 
-//Route::post('pay/{id}/send-order', [ApiController::class, 'sendOrder'])
-//    ->name('api.pay.sendOrder');
+Route::post('pay/{id}/send-order', [ApiController::class, 'sendOrder'])
+    ->name('api.pay.sendOrder');
 
-Route::post('pay/{id}/handler', [ApiController::class, 'payHandler'])
-    ->name('api.pay.handler');
+Route::post('pay/confirm', [ApiController::class, 'payConfirm'])
+    ->name('api.pay.confirm');
+
+Route::get('redirect/{action}', [ApiController::class, 'redirect'])
+    ->name('api.pay.redirect');
 
 
 Route::get('test', [TestController::class, 'test'])->name('merchant.test');

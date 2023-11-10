@@ -1,10 +1,10 @@
 @extends('layouts.admin')
 
-@section('title', 'Платежи')
+@section('title', 'Выплаты')
 
 @section('content')
     <div class="container mx-auto px-6 py-8">
-        <h3 class="text-gray-700 text-3xl font-medium">{{ __('Платежи') }}</h3>
+        <h3 class="text-gray-700 text-3xl font-medium">{{ __('Выплаты') }}</h3>
         <div class="flex flex-col mt-8">
             <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
                 <div
@@ -21,7 +21,7 @@
                             </th>
 
                             <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                {{__('Магазин')}}
+                                {{__('Пользователь')}}
                             </th>
 
                             <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
@@ -29,11 +29,11 @@
                             </th>
 
                             <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                {{__('Ордер')}}
+                                {{__('Система')}}
                             </th>
 
                             <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
-                                {{__('Система')}}
+                                {{__('Реквизиты')}}
                             </th>
 
                             <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
@@ -45,55 +45,57 @@
                         </thead>
 
                         <tbody class="bg-white">
-                        @foreach($payments as $payment)
+                        @foreach($withdrawals as $withdrawal)
                             <tr>
                                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                    <div class="text-sm leading-5 text-gray-900">{{ $payment->id }}</div>
+                                    <div class="text-sm leading-5 text-gray-900">{{ $withdrawal->id }}</div>
                                 </td>
 
                                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                     <div class="text-sm leading-5 text-gray-900">
-                                        {{ $payment->transaction->id }}
+                                        {{ $withdrawal->transaction->id }}
                                     </div>
                                 </td>
 
                                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                    <div class="text-sm leading-5 text-gray-900">{{ $payment->m_id }}</div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                    <div class="text-sm leading-5 text-gray-900">
-                                        {{ $payment->amount }}
-                                        <span>{{$payment->currency}}</span>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-                                    <div class="w-12 text-sm leading-5 text-gray-900">
-                                        <a href="{{asset('storage/' . $payment->pay_screen)}}" target="_blank">
-                                            <img class="w-full" src="{{asset('storage/' . $payment->pay_screen)}}"
-                                                 alt="">
-                                        </a>
+                                    <div class="text-sm leading-5 text-gray-900 text-center">
+                                        {{ $withdrawal->user->username }}
+                                        {{ $withdrawal->user->email }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                     <div class="text-sm leading-5 text-gray-900">
-                                        {{ $payment->system->title }}
+                                        {{ $withdrawal->amount }}
+                                        <span>{{$withdrawal->currency}}</span>
                                     </div>
                                 </td>
 
                                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                     <div class="text-sm leading-5 text-gray-900">
-                                        {{ $payment->created_at->format('Y-m-d H:i:s') }}
+                                        {{ $withdrawal->paymentSystem->title }}
+                                    </div>
+                                </td>
+
+                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                    <div class="text-sm leading-5 text-gray-900">
+                                        {{ $withdrawal->details }}
+                                    </div>
+                                </td>
+
+                                <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                    <div class="text-sm leading-5 text-gray-900">
+                                        {{ $withdrawal->created_at->format('Y-m-d H:i:s') }}
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                     <div class="text-sm leading-5 text-gray-900">
                                         <div class="flex justify-center">
-                                            @if ($payment->approved)
+                                            @if ($withdrawal->approved)
                                                 <span
                                                     class="px-3 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-600 shadow text-green-100">
-                                                    {{__('Подтвержден')}}
+                                                    {{__('Оплачен')}}
                                                 </span>
-                                            @elseif($payment->canceled)
+                                            @elseif($withdrawal->canceled)
                                                 <span
                                                     class="px-3 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-600 shadow text-green-100">
                                                         {{__('Отклонен')}}
@@ -101,7 +103,7 @@
                                         </div>
                                         @else
                                             <div class="flex flex-wrap gap-2 items-center justify-center">
-                                                <form action="{{route('admin.payment.approve', $payment->id)}}"
+                                                <form action="{{route('admin.withdrawal.approve', $withdrawal->id)}}"
                                                       method="POST">
                                                     @csrf
                                                     <button type="submit"
@@ -110,7 +112,7 @@
                                                     </button>
                                                 </form>
 
-                                                <form action="{{route('admin.payment.reject', $payment->id)}}"
+                                                <form action="{{route('admin.withdrawal.reject', $withdrawal->id)}}"
                                                       method="POST">
                                                     @csrf
                                                     <button type="submit"
@@ -126,7 +128,7 @@
                         @endforeach
                         </tbody>
                     </table>
-                    {{ $payments->links() }}
+                    {{ $withdrawals->links() }}
                 </div>
             </div>
         </div>

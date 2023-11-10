@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
 
+            $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('m_id')->unsigned();
             $table->unsignedBigInteger('payment_id')->nullable();
             $table->unsignedBigInteger('withdrawal_id')->nullable();
@@ -29,6 +30,10 @@ return new class extends Migration {
             $table->foreign('m_id')
                 ->references('id')
                 ->on('merchants');
+
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users');
 
             $table->foreign('payment_id')
                 ->references('id')

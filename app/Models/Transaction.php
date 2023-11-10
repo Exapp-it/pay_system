@@ -47,7 +47,7 @@ class Transaction extends Model
      */
     public function payment(): HasOne
     {
-        return $this->hasOne(Payment::class, 'payment_id');
+        return $this->hasOne(Payment::class, 'id', 'payment_id');
     }
 
     /**
@@ -55,7 +55,12 @@ class Transaction extends Model
      */
     protected function withdrawal(): HasOne
     {
-        return $this->hasOne(Withdrawal::class, 'withdrawal_id');
+        return $this->hasOne(Withdrawal::class, 'id', 'withdrawal_id');
+    }
+
+    protected function user(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'user_id');
     }
 
 }

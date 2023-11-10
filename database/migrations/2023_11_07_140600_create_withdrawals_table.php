@@ -12,8 +12,10 @@ return new class extends Migration {
     {
         Schema::create('withdrawals', function (Blueprint $table) {
             $table->id();
+
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('payment_system')->unsigned();
+            $table->string('details');
 
             $table->decimal('amount');
             $table->string('currency');

@@ -68,20 +68,26 @@
                         <span class="mx-3">{{ __('Реквизиты')  }}</span>
                     </a>
 
-                    <a href="{{ route('admin.ps') }}"
+                    <a href="{{ route('admin.withdrawal') }}"
                        class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
-                       x-bind:class="{'active': currentRoute === '' || currentRoute === ''}">
+                       x-bind:class="{'active': currentRoute === 'admin.withdrawal'}">
                         <span class="mx-3">{{ __('Выплаты')  }}</span>
+                        @if ($newWithdrawal > 0)
+                            <span
+                                class="bg-red-700 text-xs font-bold text-white px-2 py-1 rounded-full ml-auto shadow-2xl">
+                                {{$newWithdrawal}}
+                            </span>
+                        @endif
                     </a>
 
                     <a href="{{ route('admin.payments') }}"
                        class="text-yellow-400 m-5 font-semibold flex items-center mt-4 py-2 px-6 transition duration-300 rounded-md hover:bg-yellow-400  hover:text-black hover:shadow-md"
                        x-bind:class="{'active': currentRoute === 'admin.payments'}">
                         <span class="mx-3">{{ __('Платежи')  }}</span>
-                        @if ($newMerchants > 0)
+                        @if ($newPayment > 0)
                             <span
                                 class="bg-red-700 text-xs font-bold text-white px-2 py-1 rounded-full ml-auto shadow-2xl">
-                                {{$newMerchants}}
+                                {{$newPayment}}
                             </span>
                         @endif
                     </a>

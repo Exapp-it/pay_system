@@ -87,7 +87,7 @@ class ApiController extends Controller
      * @param $id
      * @return JsonResponse
      */
-    public function payHandler(Request $request, $id): JsonResponse
+    public function sendOrder(Request $request, $id): JsonResponse
     {
         try {
             $request->validate([
@@ -119,11 +119,30 @@ class ApiController extends Controller
 
     public function payConfirm(Request $request)
     {
-        //$request->session()->flush();
-        return response()->json([
-            'message' => 'Success',
-            'data' => $request->session()->get('transaction')
-        ], 200);
+        $transaction = Transaction::find($request->session()->get('transaction'));
+
+        if ($transaction->payment->approved && $transaction->confirmed) {
+            return response()->json(['message' => 'Success'], 200);
+        }
+        if ($transaction->payment->canceled && $transaction->canceled) {
+            return response()->json(['message' => 'Cancel'], 200);
+        }
+
+//        $request->session()->flush();
+
+        return response()->json(['message' => 'Waiting'], 200);
     }
+
+    public function redirect(Request $request, $action)
+    {
+        $transaction = Transaction::find($request->session()->get('transaction'));
+
+        if ($action === 'approve') {
+            return redirect()->to($transaction->merchant->success_url);
+        }
+
+        return redirect()->to($transaction->merchant->fail_url);
+    }
+
 
 }

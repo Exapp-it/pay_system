@@ -65,7 +65,7 @@
                                     class="rounded-lg border-gray-300 text-gray-700 sm:text-sm"
                                 >
                                     <option value="">{{ __('Выберите валюту') }}</option>
-                                    @foreach(config('payment.currencies') as $currency)
+                                    @foreach($currencies as $currency)
                                         <option value="{{$currency}}">{{$currency}}</option>
                                     @endforeach
                                 </select>

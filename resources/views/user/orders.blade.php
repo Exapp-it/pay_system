@@ -1,24 +1,16 @@
 @extends('layouts.user')
 
-@section('title', 'Мои магазины')
+@section('title', 'Мои операции')
 
 @section('content')
     <div class="container mx-auto px-6 py-8">
-        <h3 class="text-gray-700 text-3xl font-medium">{{ __('Список магазин')  }}</h3>
-
-        <div class="my-8">
-            <a href="{{ route("merchant.create") }}"
-               class="bg-gold-300 hover:bg-black hover:text-gold-300 text-black font-bold py-2 px-4 rounded transition duration-300">
-                {{ __('Подключить магазин') }}
-            </a>
-        </div>
-
+        <h3 class="text-gray-700 text-3xl font-medium">{{ __('Все операции')  }}</h3>
 
         <div class="flex flex-col mt-8">
             <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
                 <div
                     class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-                    @isset($merchants)
+                    @isset($orders)
                         <table class="min-w-full">
                             <thead>
                             <tr>
@@ -44,12 +36,12 @@
                             </thead>
 
                             <tbody class="bg-white">
-                            @foreach($merchants as $merchant)
+                            @foreach($orders as $order)
                                 <tr>
                                     <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
                                         <div class="text-sm font-semibold leading-5 text-gray-900">
-                                            <a href="{{ route("merchant.show", $merchant->id) }}">
-                                                {{ $merchant->m_id }}
+                                            <a href="{{ route("merchant.show", $order->merchant->id) }}">
+                                                {{ $order->m_id }}
                                             </a>
                                         </div>
                                     </td>
@@ -110,13 +102,13 @@
                         </table>
                     @endisset
 
-                    @empty($merchant)
+                    @empty($order)
                         <div class="flex justify-center">
                             <span
-                                class="text-xl text-red-600 font-semibold p-6">{{__('У вас нет подключенных магазинов на данный момент')}}</span>
+                                class="text-xl text-red-600 font-semibold p-6">{{__('У вас нет операций на данный момент')}}</span>
                         </div>
                     @endempty
-                    {{ $merchants->links() }}
+{{--                    {{ $order->links() }}--}}
                 </div>
             </div>
         </div>

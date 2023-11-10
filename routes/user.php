@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MerchantController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WithdrawalController;
 use Illuminate\Support\Facades\Route;
@@ -48,6 +49,12 @@ Route::middleware('auth')->group(function () {
     Route::prefix('withdrawal')->group(function () {
         Route::get('create', [WithdrawalController::class, 'create'])
             ->name('user.withdrawal.create');
+
+        Route::post('store', [WithdrawalController::class, 'store'])
+            ->name('user.withdrawal.store');
     });
+
+    Route::get('orders', [OrderController::class, 'index'])
+        ->name('user.orders');
 
 });

@@ -30,7 +30,11 @@ class PaymentSystemController extends Controller
      */
     public function create(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        return view('admin.ps.create');
+        $fiatCurrencies = config('payment.currencies.fiat');
+        $cryptoCurrencies = config('payment.currencies.crypto');
+        $currencies = [...$fiatCurrencies, ...$cryptoCurrencies];
+
+        return view('admin.ps.create', ['currencies' => $currencies]);
     }
 
     /**

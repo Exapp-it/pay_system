@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\PaymentSystemController;
 use App\Http\Controllers\Admin\PSInfoController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\WithdrawalController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -21,73 +22,99 @@ Route::middleware('admin.auth')->group(function () {
         ->name('admin.logout');
 
 
-    Route::get('merchant', [MerchantController::class, 'index'])
-        ->name('admin.merchant');
+    Route::prefix('merchant')->group(function () {
 
-    Route::get('{id}/merchant', [MerchantController::class, 'show'])
-        ->name('admin.merchant.show');
+        Route::get('', [MerchantController::class, 'index'])
+            ->name('admin.merchant');
 
-    Route::post('{id}/approve', [MerchantController::class, 'approve'])
-        ->name('admin.merchant.approve');
+        Route::get('{id}/show', [MerchantController::class, 'show'])
+            ->name('admin.merchant.show');
 
-    Route::post('{id}/percent', [MerchantController::class, 'percent'])
-        ->name('admin.merchant.percent');
+        Route::post('{id}/approve', [MerchantController::class, 'approve'])
+            ->name('admin.merchant.approve');
 
-    Route::post('{id}/reject', [MerchantController::class, 'reject'])
-        ->name('admin.merchant.reject');
+        Route::post('{id}/percent', [MerchantController::class, 'percent'])
+            ->name('admin.merchant.percent');
 
-    Route::post('{id}/block', [MerchantController::class, 'block'])
-        ->name('admin.merchant.block');
+        Route::post('{id}/reject', [MerchantController::class, 'reject'])
+            ->name('admin.merchant.reject');
 
-    Route::post('{id}/unlock', [MerchantController::class, 'unlock'])
-        ->name('admin.merchant.unlock');
+        Route::post('{id}/block', [MerchantController::class, 'block'])
+            ->name('admin.merchant.block');
 
-
-    Route::get('pay-systems', [PaymentSystemController::class, 'index'])
-        ->name('admin.ps');
-
-    Route::get('pay-systems/create', [PaymentSystemController::class, 'create'])
-        ->name('admin.ps.create');
-
-    Route::post('pay-systems/store', [PaymentSystemController::class, 'store'])
-        ->name('admin.ps.store');
-
-    Route::get('pay-systems/{id}/edit', [PaymentSystemController::class, 'edit'])
-        ->name('admin.ps.edit');
-
-    Route::post('pay-systems/{id}/update', [PaymentSystemController::class, 'update'])
-        ->name('admin.ps.update');
-
-    Route::post('pay-systems/{id}/change', [PaymentSystemController::class, 'changeStatus'])
-        ->name('admin.ps.change');
+        Route::post('{id}/unlock', [MerchantController::class, 'unlock'])
+            ->name('admin.merchant.unlock');
+    });
 
 
-    Route::get('pay-system/info', [PSInfoController::class, 'index'])
-        ->name('admin.ps.info');
+    Route::prefix('pay-systems')->group(function () {
 
-    Route::get('pay-system/{id}/info', [PSInfoController::class, 'show'])
-        ->name('admin.ps.info.show');
+        Route::get('', [PaymentSystemController::class, 'index'])
+            ->name('admin.ps');
 
-    Route::get('pay-system/info/create', [PSInfoController::class, 'create'])
-        ->name('admin.ps.info.create');
+        Route::get('create', [PaymentSystemController::class, 'create'])
+            ->name('admin.ps.create');
 
-    Route::post('pay-system/info/create', [PSInfoController::class, 'store'])
-        ->name('admin.ps.info.store');
+        Route::post('store', [PaymentSystemController::class, 'store'])
+            ->name('admin.ps.store');
 
-    Route::post('pay-system/{id}/info/change', [PSInfoController::class, 'change'])
-        ->name('admin.ps.info.change');
+        Route::get('{id}/edit', [PaymentSystemController::class, 'edit'])
+            ->name('admin.ps.edit');
 
-    Route::post('pay-system/{id}/info/delete', [PSInfoController::class, 'destroy'])
-        ->name('admin.ps.info.delete');
+        Route::post('{id}/update', [PaymentSystemController::class, 'update'])
+            ->name('admin.ps.update');
 
-    Route::get('pay-system/{id}/info/edit', [PSInfoController::class, 'edit'])
-        ->name('admin.ps.info.edit');
+        Route::post('{id}/change', [PaymentSystemController::class, 'changeStatus'])
+            ->name('admin.ps.change');
 
-    Route::post('pay-system/{id}/info/update', [PSInfoController::class, 'update'])
-        ->name('admin.ps.info.update');
+        Route::get('info', [PSInfoController::class, 'index'])
+            ->name('admin.ps.info');
 
-    Route::get('payments', [PaymentController::class, 'index'])
-        ->name('admin.payments');
+        Route::get('{id}/info', [PSInfoController::class, 'show'])
+            ->name('admin.ps.info.show');
+
+        Route::get('info/create', [PSInfoController::class, 'create'])
+            ->name('admin.ps.info.create');
+
+        Route::post('info/create', [PSInfoController::class, 'store'])
+            ->name('admin.ps.info.store');
+
+        Route::post('{id}/info/change', [PSInfoController::class, 'change'])
+            ->name('admin.ps.info.change');
+
+        Route::post('{id}/info/delete', [PSInfoController::class, 'destroy'])
+            ->name('admin.ps.info.delete');
+
+        Route::get('{id}/info/edit', [PSInfoController::class, 'edit'])
+            ->name('admin.ps.info.edit');
+
+        Route::post('{id}/info/update', [PSInfoController::class, 'update'])
+            ->name('admin.ps.info.update');
+    });
+
+
+    Route::prefix('payments')->group(function () {
+
+        Route::get('', [PaymentController::class, 'index'])
+            ->name('admin.payments');
+
+        Route::post('{id}/approve', [PaymentController::class, 'approve'])
+            ->name('admin.payment.approve');
+
+        Route::post('{id}/reject', [PaymentController::class, 'reject'])
+            ->name('admin.payment.reject');
+    });
+
+    Route::prefix('withdrawal')->group(function () {
+        Route::get('', [WithdrawalController::class, 'index'])
+            ->name('admin.withdrawal');
+
+        Route::post('{id}/approve', [WithdrawalController::class, 'approve'])
+            ->name('admin.withdrawal.approve');
+
+        Route::post('{id}/reject', [WithdrawalController::class, 'reject'])
+            ->name('admin.withdrawal.reject');
+    });
 });
 
 Route::middleware('guest:admin')->group(function () {

@@ -2,39 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Transaction;
+use App\Services\CurrencyApiService;
+use App\Services\ExchangeService;
 use Illuminate\Http\Request;
 
 class  TestController extends Controller
 {
     public function test(): void
     {
-        $shop = '190916925350';
-        $order = '1';
-        $amount = number_format(100, 2, '.', '');
-        $currency = 'RUB';
-        $key = 'mEbZKIF5#3c0I82w5LFAdQzTMOW4F7VV';
+        $currencies = config('payment.currencies');
+        $currentCurrency = 'USD';
+        $defaultCurrency = config('payment.default_currency.name');
+        $amountDefaultCurrency = 250;
 
-        $data = [
-            $shop,
-            $order,
-            $amount,
-            $currency,
-            $key,
-        ];
+        if ($currentCurrency !== $defaultCurrency) {
+            $type = collect($currencies)->filter(function ($currencyArray) use ($currentCurrency) {
+                return in_array($currentCurrency, $currencyArray);
+            })->keys()->first();
 
-        $hashString = implode(':', $data);
-        $hashedValue = hash('sha256', $hashString);
+            $amountUSD = $amountDefaultCurrency;
 
-        $signature = strtoupper($hashedValue);
+            if ($currentCurrency !== 'USD' && $currentCurrency !== 'USDT') {
+                $amountUSD = ExchangeService::fromUSD($amountDefaultCurrency, $currentCurrency, $type);
+            }
+            $amountCurrentCurrency = ExchangeService::fromDefaultCurrency($amountUSD);
+        }
 
-        echo(
-            '<form method="post" action="http://127.0.0.1:8000/api">
-                <input type="text" name="shop" value="' . $shop . '">
-                <input type="text" name="order" value="' . $order . '">
-                <input type="text" name="amount" value="' . $amount . '">
-                <input type="text" name="currency" value="' . $currency . '">
-                <input type="text" name="signature" value="' . $signature . '">
-                <input type="submit" name="handler" value="process" />
-            </form>');
+        dd($amountCurrentCurrency);
+
+
     }
 }

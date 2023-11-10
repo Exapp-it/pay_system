@@ -154,15 +154,8 @@
                 </div>
                 <div class="pt-1 pb-8">
                     <p class="mb-2 text-xl font-bold text-gray-900">{{__('Пожалуйста, прикрепите квитанцию о переводе.')}}</p>
-                    <div x-data="{
-                        image: '',
-                        url: '{{ route('api.pay.handler', $payment->id) }}'
-                    }"
-                         x-init="
-                            $store.formActive = true;
-                            $store.url = url
-                         ">
-                        <form @submit.prevent="$store.uploadImage">
+                    <div x-data="{ image: '', formActive: true, payConfirmed: false}">
+                        <form @submit.prevent="uploadImage" x-show="formActive">
                             <div class="flex flex-wrap items-center space-x-6 px-2 py-4">
                                 <div class="shrink-0" x-show="image instanceof Blob">
                                     <img x-bind:src="image ? URL.createObjectURL(image) : null"
@@ -171,7 +164,7 @@
                                 </div>
                                 <label class="block">
                                     <input type="file" name="order"
-                                           :disabled="!$store.formActive"
+                                           :disabled="!formActive"
                                            x-on:change="image = $event.target.files[0];"
                                            class="block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-1 file:border-yellow-400 file:text-sm file:font-semibold file:bg-yellow-50 file:text-black hover:file:bg-yellow-400 file:cursor-pointer"
                                            accept="image/*"/>
@@ -180,7 +173,7 @@
 
                             </div>
                             <button type="submit"
-                                    :disabled="!$store.formActive"
+                                    :disabled="!formActive"
                                     class="group relative mt-5 inline-block overflow-hidden border border-gold-400 px-8 py-3 focus:outline-none focus:ring">
                                 <span
                                     class="absolute inset-y-0 left-0 w-[2px] bg-gold-400 transition-all group-hover:w-full group-active:bg-gold-400"></span>
@@ -189,11 +182,14 @@
                                     {{ __('Я Оплатил') }}
                                 </span>
                             </button>
-
                         </form>
-                        <div class="flex flex-col mt-5 justify-center" x-show="!$store.formActive">
+
+                        <div class="flex flex-col mt-5 justify-center" x-show="!formActive && !payConfirmed">
                             <img class="w-72 h-auto" src="{{asset('storage/img/loader.gif')}}" alt="">
                             <p class="text-gold-600 font-semibold">{{__('Подождите, пока платеж будет подтвержден...')}}</p>
+                        </div>
+                        <div class="flex flex-col mt-5 justify-center" x-show="payConfirmed">
+                            <p class="text-green-600 font-semibold">{{__('Платеж проведена успешно')}}</p>
                         </div>
                     </div>
                 </div>
@@ -222,11 +218,87 @@
     </div>
 
     <script>
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        function uploadImage() {
+            const errorMessageElement = document.getElementById('errorMessage');
+            errorMessageElement.textContent = ''
+
+
+            const formData = new FormData();
+            formData.append('order', this.image);
+
+            fetch('{{ route('api.pay.sendOrder', $payment->id) }}', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+            })
+                .then(response => {
+                    this.formActive = false;
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            // Если есть поле "order" в errorData, извлекаем сообщение об ошибке
+                            if (errorData.order && errorData.order.length > 0) {
+                                throw new Error(errorData.order[0]);
+                            } else {
+                                throw new Error('Произошла ошибка валидации');
+                            }
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Обработка успешного ответа от сервера
+                    console.log(data);
+                    setInterval(sendRepeatRequest.bind(this), 30000);
+                    // Вы можете здесь выполнить дополнительные действия с данными
+                })
+                .catch(error => {
+                    // Обработка ошибок
+                    errorMessageElement.textContent = error.message;
+                    this.formActive = true;
+                });
+        }
 
         function sendRepeatRequest() {
-            // Ваш код для отправки повторных запросов
-            console.log('Отправка повторного запроса...');
-            // Вы можете повторно отправить запрос к серверу
+            fetch('{{ route('api.pay.confirm', $payment->id) }}', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json',
+                },
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(errorData => {
+                            throw new Error('Произошла ошибка валидации');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.message === 'Waiting') {
+                        console.info('Ожидание подтвердении');
+                    } else if (data.message === 'Cancel') {
+                        console.log('Платеж отклонен');
+                        setTimeout(function () {
+                            window.location.href = '{{ route('api.pay.redirect', 'cancel') }}';
+                        }, 3000);
+                    } else if (data.message === 'Success') {
+                        this.payConfirmed = true
+                        console.log('Платеж подтвержден');
+                        setTimeout(function () {
+                            window.location.href = '{{ route('api.pay.redirect', 'approve') }}';
+                        }, 1500);
+                    }
+                })
+                .catch(error => {
+                    // Обработка ошибок
+                    console.log(error)
+                });
         }
     </script>
 
