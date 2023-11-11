@@ -29,19 +29,23 @@ return new class extends Migration {
 
             $table->foreign('m_id')
                 ->references('id')
-                ->on('merchants');
+                ->on('merchants')
+                ->onDelete('cascade');
 
             $table->foreign('user_id')
                 ->references('id')
-                ->on('users');
+                ->on('users')
+                ->onDelete('cascade');
 
             $table->foreign('payment_id')
                 ->references('id')
-                ->on('payments');
+                ->on('payments')
+                ->onDelete('cascade');
 
             $table->foreign('withdrawal_id')
                 ->references('id')
-                ->on('withdrawals');
+                ->on('withdrawals')
+                ->onDelete('cascade');
 
             $table->index('id');
             $table->index('m_id');

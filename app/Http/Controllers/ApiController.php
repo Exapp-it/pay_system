@@ -12,6 +12,7 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -66,6 +67,7 @@ class ApiController extends Controller
             'payment_system' => $paymentSystem->id,
         ]);
 
+
         $details = $paymentSystem->infos->reduce(function ($carry, $info) {
             if ($carry === null || $info->usage_count < $carry->usage_count) {
                 return $info;
@@ -103,6 +105,7 @@ class ApiController extends Controller
 
             $transaction = Transaction::create([
                 'm_id' => $payment->merchant->id,
+                'user_id' => $payment->merchant->user_id,
                 'amount' => $payment->amount,
                 'currency' => $payment->currency,
                 'type' => 'payIn',
@@ -117,7 +120,11 @@ class ApiController extends Controller
     }
 
 
-    public function payConfirm(Request $request)
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function payConfirm(Request $request): JsonResponse
     {
         $transaction = Transaction::find($request->session()->get('transaction'));
 
@@ -133,7 +140,12 @@ class ApiController extends Controller
         return response()->json(['message' => 'Waiting'], 200);
     }
 
-    public function redirect(Request $request, $action)
+    /**
+     * @param Request $request
+     * @param $action
+     * @return RedirectResponse
+     */
+    public function redirect(Request $request, $action): \Illuminate\Http\RedirectResponse
     {
         $transaction = Transaction::find($request->session()->get('transaction'));
 

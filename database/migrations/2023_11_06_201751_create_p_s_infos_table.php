@@ -24,7 +24,8 @@ return new class extends Migration {
 
             $table->foreign('ps_id')
                 ->references('id')
-                ->on('payment_systems');
+                ->on('payment_systems')
+                ->onDelete('cascade');
 
             $table->index('ps_id');
             $table->index('value');

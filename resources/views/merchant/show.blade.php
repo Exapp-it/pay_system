@@ -17,17 +17,27 @@
             <span class="font-semibold {{ $merchant->activated ? 'text-lime-600' : 'text-red-600' }}">
                 {{ __('Статус') }} - {{ $merchant->activated ? __('Активный') : __('Неактивный') }}
             </span>
-            <form action="{{ route("merchant.destroy", $merchant->id) }}" method="POST">
-                @csrf
-                <button type="submit"
-                        class="group relative inline-block overflow-hidden border border-red-600 px-8 py-3 focus:outline-none focus:ring">
+            <div class="flex gap-4">
+                <a href="{{route('merchant.edit', [$merchant->id])}}"
+                   class="group relative inline-block overflow-hidden border border-gold-300 px-8 py-3 focus:outline-none focus:ring">
                     <span
-                        class="absolute inset-y-0 left-0 w-[2px] bg-red-600 transition-all group-hover:w-full group-active:bg-red-600"></span>
+                        class="absolute inset-y-0 left-0 w-[2px] bg-gold-300 transition-all group-hover:w-full group-active:bg-gold-300"></span>
                     <span class="relative text-sm font-medium text-black transition-colors group-hover:text-black">
-                        {{ __('Удалить') }}
+                        {{ __('Редактировать') }}
                     </span>
-                </button>
-            </form>
+                </a>
+                <form action="{{ route("merchant.destroy", $merchant->id) }}" method="POST">
+                    @csrf
+                    <button type="submit"
+                            class="group relative inline-block overflow-hidden border border-red-600 px-8 py-3 focus:outline-none focus:ring">
+                        <span
+                            class="absolute inset-y-0 left-0 w-[2px] bg-red-600 transition-all group-hover:w-full group-active:bg-red-600"></span>
+                        <span class="relative text-sm font-medium text-black transition-colors group-hover:text-black">
+                            {{ __('Удалить') }}
+                        </span>
+                    </button>
+                </form>
+            </div>
         </div>
         <div class="flex flex-col mt-8">
             <div class="-my-2 py-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">

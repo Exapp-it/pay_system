@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->string('details');
 
             $table->decimal('amount');
+            $table->decimal('amount_default_currency');
             $table->string('currency');
 
             $table->boolean('approved')->default(false);
@@ -27,11 +28,13 @@ return new class extends Migration {
 
             $table->foreign('user_id')
                 ->references('id')
-                ->on('users');
+                ->on('users')
+                ->onDelete('cascade');
 
             $table->foreign('payment_system')
                 ->references('id')
-                ->on('payment_systems');
+                ->on('payment_systems')
+                ->onDelete('cascade');
 
             $table->index('user_id');
             $table->index('payment_system');

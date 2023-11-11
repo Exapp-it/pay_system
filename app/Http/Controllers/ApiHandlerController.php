@@ -32,6 +32,6 @@ class ApiHandlerController extends Controller
             return response()->json(['message' => 'Hash no verified'], 422);
         }
 
-        return redirect()->route('api', $request->all());
+        return redirect()->route('api.index', $request->all());
     }
 }

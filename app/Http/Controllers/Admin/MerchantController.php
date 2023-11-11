@@ -18,7 +18,9 @@ class MerchantController extends Controller
      */
     public function index(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $merchants = Merchant::query()->paginate(10);
+        $merchants = Merchant::query()
+            ->orderBy('created_at', 'DESC')
+            ->paginate(10);
 
         return view('admin.merchant.index', ['merchants' => $merchants]);
     }

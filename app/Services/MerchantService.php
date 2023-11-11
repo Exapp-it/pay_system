@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Merchant;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 
 class MerchantService
@@ -23,11 +24,40 @@ class MerchantService
     {
         $this->request->validate([
             'title' => ['required', 'string'],
-            'base_url' => ['required', 'string', 'unique:merchants,base_url'],
-            'success_url' => ['required', 'string'],
-            'fail_url' => ['required', 'string'],
-            'handler_url' => ['required', 'string'],
-        ]);;
+            'base_url' => ['required', 'string', 'unique:merchants,base_url', 'url:https'],
+            'success_url' => [
+                'required',
+                'string',
+                'url:https',
+                function ($attribute, $value, $fail) {
+                    $baseUrl = request('base_url');
+                    if (strpos($value, $baseUrl) !== 0) {
+                        $fail('success_url должен начинаться с base_url');
+                    }
+                },
+            ],
+            'fail_url' => [
+                'required',
+                'string',
+                'url:https',
+                function ($attribute, $value, $fail) {
+                    $baseUrl = request('base_url');
+                    if (strpos($value, $baseUrl) !== 0) {
+                        $fail('fail_url должен начинаться с base_url');
+                    }
+                },
+            ],
+            'handler_url' => [
+                'required',
+                'string',
+                function ($attribute, $value, $fail) {
+                    $baseUrl = request('base_url');
+                    if (strpos($value, $baseUrl) !== 0) {
+                        $fail('handler_url должен начинаться с base_url');
+                    }
+                },
+            ],
+        ]);
 
         return $this;
     }
@@ -87,7 +117,7 @@ class MerchantService
         $baseValueString = strval($baseValue);
         $shuffledBaseValueString = str_shuffle($baseValueString);
 
-        $uniqueId = substr(intval($shuffledBaseValueString) + $randomDigits, 0,  $length);
+        $uniqueId = substr(intval($shuffledBaseValueString) + $randomDigits, 0, $length);
 
         return (int)$uniqueId;
     }

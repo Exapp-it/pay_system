@@ -39,6 +39,12 @@ Route::middleware('auth')->group(function () {
         Route::post('store', [MerchantController::class, 'store'])
             ->name('merchant.store');
 
+        Route::get('{id}/edit', [MerchantController::class, 'edit'])
+            ->name('merchant.edit');
+
+        Route::post('{id}/update', [MerchantController::class, 'update'])
+            ->name('merchant.update');
+
         Route::post('{id}/activate', [MerchantController::class, 'activateOrDeactivate'])
             ->name('merchant.activate');
 

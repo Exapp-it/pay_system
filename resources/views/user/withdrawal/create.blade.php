@@ -16,20 +16,19 @@
                     @csrf
                     <div
                         class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-                        <div class="lg:flex">
+                        <div class="lg:flex mt-5">
                             <div class="px-2 py-4 lg:w-1/2">
-                                <label for="amount"
-                                       class="relative block overflow-hidden border-b border-gray-200 bg-transparent pt-3 focus-within:border-blue-600">
+                                <div class="relative">
                                     <input type="text"
                                            name="amount"
                                            id="amount"
                                            value="{{ old('amount') }}"
-                                           class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"/>
-                                    <span
-                                        class="absolute start-0 top-2 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs">
-                                    {{ __('Введите сумму') }}
-                                    </span>
-                                </label>
+                                           class="peer w-full py-2 border-2 border-gold-200 rounded-md focus:ring-1 focus:ring-gold-300 focus:border-gold-300 focus:outline-none placeholder-transparent">
+                                    <label for="amount"
+                                           class="text-neutral-500 text-sm font-semibold  absolute -top-4 left-2 -translate-y-1/2 transition-all peer-placeholder-shown:left-4 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-neutral-900 peer-focus:-top-4 peer-focus:left-2 peer-focus:text-neutral-600">
+                                        {{ __('Сумма') }}
+                                    </label>
+                                </div>
 
                                 @error('amount')
                                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
@@ -38,40 +37,40 @@
 
                             <div class="px-2 py-4">
                                 <label for="m_id" class="block text-sm font-medium text-gray-900">
-                                    {{ __('Баланс')  }}
+                                    <select
+                                        name="m_id"
+                                        id="m_id"
+                                        class="rounded-lg border-gray-300 text-gray-700 sm:text-sm"
+                                    >
+                                        <option value="">{{ __('Выберите баланс') }}</option>
+                                        @foreach($merchants as $merchant)
+                                            <option value="{{$merchant->id}}">{{$merchant->balance}}
+                                                ({{$merchant->title}}
+                                                )
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </label>
 
-                                <select
-                                    name="m_id"
-                                    id="m_id"
-                                    class="rounded-lg border-gray-300 text-gray-700 sm:text-sm"
-                                >
-                                    <option value="">{{ __('Выберите баланс') }}</option>
-                                    @foreach($merchants as $merchant)
-                                        <option value="{{$merchant->id}}">{{$merchant->balance}} ({{$merchant->title}}
-                                            )
-                                        </option>
-                                    @endforeach
-                                </select>
                                 @error('m_id')
                                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                                 @enderror
+
                             </div>
                         </div>
                         <div class="lg:flex">
                             <div class="px-2 py-4 lg:w-1/2">
-                                <label for="details"
-                                       class="relative block overflow-hidden border-b border-gray-200 bg-transparent pt-3 focus-within:border-blue-600">
+                                <div class="relative">
                                     <input type="text"
                                            name="details"
                                            id="details"
                                            value="{{ old('details') }}"
-                                           class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"/>
-                                    <span
-                                        class="absolute start-0 top-2 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs">
-                                    {{ __('Реквизиты') }}
-                                    </span>
-                                </label>
+                                           class="peer w-full py-2 border-2 border-gold-200 rounded-md focus:ring-1 focus:ring-gold-300 focus:border-gold-300 focus:outline-none placeholder-transparent">
+                                    <label for="details"
+                                           class="text-neutral-500 text-sm font-semibold  absolute -top-4 left-2 -translate-y-1/2 transition-all peer-placeholder-shown:left-4 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-neutral-900 peer-focus:-top-4 peer-focus:left-2 peer-focus:text-neutral-600">
+                                        {{ __('Реквизиты') }}
+                                    </label>
+                                </div>
 
                                 @error('amount')
                                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
@@ -80,21 +79,19 @@
 
                             <div class="px-2 py-4">
                                 <label for="ps_id" class="block text-sm font-medium text-gray-900">
-                                    {{ __('Платежная система')  }}
+                                    <select
+                                        name="ps_id"
+                                        id="ps_id"
+                                        class="rounded-lg border-gray-300 text-gray-700 sm:text-sm"
+                                    >
+                                        <option value="">{{ __('Выберите платежную систему') }}</option>
+                                        @foreach($paymentSystems as $paymentSystem)
+                                            <option value="{{$paymentSystem->id}}">
+                                                {{$paymentSystem->title}} ({{$paymentSystem->currency}} )
+                                            </option>
+                                        @endforeach
+                                    </select>
                                 </label>
-
-                                <select
-                                    name="ps_id"
-                                    id="ps_id"
-                                    class="rounded-lg border-gray-300 text-gray-700 sm:text-sm"
-                                >
-                                    <option value="">{{ __('Выберите платежную систему') }}</option>
-                                    @foreach($paymentSystems as $paymentSystem)
-                                        <option value="{{$paymentSystem->id}}">
-                                            {{$paymentSystem->title}} ({{$paymentSystem->currency}} )
-                                        </option>
-                                    @endforeach
-                                </select>
                                 @error('ps_id')
                                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                                 @enderror

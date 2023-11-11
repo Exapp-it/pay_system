@@ -19,7 +19,7 @@ class PaymentSystemController extends Controller
      */
     public function index(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
     {
-        $paySystems = PaymentSystem::all();
+        $paySystems = PaymentSystem::orderBy('created_at', 'DESC')->get();
 
         return view('admin.ps.index', ['paySystems' => $paySystems]);
     }

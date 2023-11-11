@@ -17,6 +17,7 @@ return new class extends Migration {
 
 
             $table->decimal('amount');
+            $table->decimal('amount_default_currency');
             $table->string('currency');
             $table->string('order');
 
@@ -29,12 +30,14 @@ return new class extends Migration {
 
             $table->foreign('m_id')
                 ->references('m_id')
-                ->on('merchants');
+                ->on('merchants')
+                ->onDelete('cascade');
 
 
             $table->foreign('payment_system')
                 ->references('id')
-                ->on('payment_systems');
+                ->on('payment_systems')
+                ->onDelete('cascade');
 
             $table->index('id');
             $table->index('m_id');

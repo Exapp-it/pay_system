@@ -11,7 +11,7 @@ Route::post('', ApiHandlerController::class)
 
 
 Route::get('', [ApiController::class, 'index'])
-    ->name('api');
+    ->name('api.index');
 
 Route::post('pay', [ApiController::class, 'pay'])
     ->name('api.pay');

@@ -16,20 +16,19 @@
                     @csrf
                     <div
                         class="align-middle inline-block min-w-full shadow overflow-hidden sm:rounded-lg border-b border-gray-200">
-                        <div class="lg:flex">
+                        <div class="lg:flex pt-5">
                             <div class="px-2 py-4 lg:w-1/2">
-                                <label for="title"
-                                       class="relative block overflow-hidden border-b border-gray-200 bg-transparent pt-3 focus-within:border-blue-600">
+                                <div class="relative">
                                     <input type="text"
                                            name="title"
                                            id="title"
                                            value="{{ old('title') }}"
-                                           class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"/>
-                                    <span
-                                        class="absolute start-0 top-2 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs">
-                                    {{ __('Название') }}
-                                    </span>
-                                </label>
+                                           class="peer w-full py-2 border-2 border-gold-200 rounded-md focus:ring-1 focus:ring-gold-300 focus:border-gold-300 focus:outline-none placeholder-transparent">
+                                    <label for="title"
+                                           class="text-neutral-500 text-sm font-semibold  absolute -top-4 left-2 -translate-y-1/2 transition-all peer-placeholder-shown:left-4 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-neutral-900 peer-focus:-top-4 peer-focus:left-2 peer-focus:text-neutral-600">
+                                        {{ __('Название') }}
+                                    </label>
+                                </div>
 
                                 @error('title')
                                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
@@ -37,18 +36,17 @@
                             </div>
 
                             <div class="px-2 py-4 lg:w-1/2">
-                                <label for="base_url"
-                                       class="relative block overflow-hidden border-b border-gray-200 bg-transparent pt-3 focus-within:border-blue-600">
+                                <div class="relative">
                                     <input type="text"
                                            name="base_url"
                                            id="base_url"
-                                           value="{{ old('base_url') }}"
-                                           class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"/>
-                                    <span
-                                        class="absolute start-0 top-2 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs">
-                                    {{ __('Домен') }}
-                                    </span>
-                                </label>
+                                           value="{{old('base_url')}}"
+                                           class="peer w-full py-2 border-2 border-gold-200 rounded-md focus:ring-1 focus:ring-gold-300 focus:border-gold-300 focus:outline-none placeholder-transparent">
+                                    <label for="base_url"
+                                           class="text-neutral-500 text-sm font-semibold  absolute -top-4 left-2 -translate-y-1/2 transition-all peer-placeholder-shown:left-4 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-neutral-900 peer-focus:-top-4 peer-focus:left-2 peer-focus:text-neutral-600">
+                                        {{ __('Домен') }}
+                                    </label>
+                                </div>
                                 <span class="text-gray-500 text-xs mt-2">
                                     {{ __('Удостоверьтесь, что ваш домен использует протокол (https)') }}
                                 </span>
@@ -58,65 +56,54 @@
 
                             </div>
                         </div>
-                        <div class="lg:flex">
+                        <div class="lg:flex mt-2">
                             <div class="px-2 py-4 lg:w-1/3">
-                                <label for="success_url"
-                                       class="relative block overflow-hidden border-b border-gray-200 bg-transparent pt-3 focus-within:border-blue-600">
+                                <div class="relative">
                                     <input type="text"
                                            name="success_url"
                                            id="success_url"
                                            value="{{ old('success_url')  }}"
-                                           class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"/>
-                                    <span
-                                        class="absolute start-0 top-2 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs">
-                                    {{ __('URL успешной оплаты') }}
-                                </span>
-                                </label>
-                                <span class="text-gray-500 text-xs mt-2">
-                                    {{ __('Пример: success или success.php') }}
-                                </span>
+                                           class="peer w-full py-2 border-2 border-gold-200 rounded-md focus:ring-1 focus:ring-gold-300 focus:border-gold-300 focus:outline-none placeholder-transparent">
+                                    <label for="success_url"
+                                           class="text-neutral-500 text-sm font-semibold  absolute -top-4 left-2 -translate-y-1/2 transition-all peer-placeholder-shown:left-4 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-neutral-900 peer-focus:-top-4 peer-focus:left-2 peer-focus:text-neutral-600">
+                                        {{ __('URL успешной оплаты') }}
+                                    </label>
+                                </div>
+
                                 @error('success_url')
                                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                                 @enderror
                             </div>
 
                             <div class="px-2 py-4 lg:w-1/3">
-                                <label for="fail_url"
-                                       class="relative block overflow-hidden border-b border-gray-200 bg-transparent pt-3 focus-within:border-blue-600">
+                                <div class="relative">
                                     <input type="text"
                                            name="fail_url"
                                            id="fail_url"
                                            value="{{ old('fail_url')  }}"
-                                           class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"/>
-                                    <span
-                                        class="absolute start-0 top-2 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs">
-                                    {{ __('URL неуспешной оплаты') }}
-                                </span>
-                                </label>
-                                <span class="text-gray-500 text-xs mt-2">
-                                    {{ __('Пример: fail или fail.php') }}
-                                </span>
+                                           class="peer w-full py-2 border-2 border-gold-200 rounded-md focus:ring-1 focus:ring-gold-300 focus:border-gold-300 focus:outline-none placeholder-transparent">
+                                    <label for="fail_url"
+                                           class="text-neutral-500 text-sm font-semibold  absolute -top-4 left-2 -translate-y-1/2 transition-all peer-placeholder-shown:left-4 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-neutral-900 peer-focus:-top-4 peer-focus:left-2 peer-focus:text-neutral-600">
+                                        {{ __('URL неуспешной оплаты') }}
+                                    </label>
+                                </div>
                                 @error('fail_url')
                                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                                 @enderror
                             </div>
 
                             <div class="px-2 py-4 lg:w-1/3">
-                                <label for="handler_url"
-                                       class="relative block overflow-hidden border-b border-gray-200 bg-transparent pt-3 focus-within:border-blue-600">
+                                <div class="relative">
                                     <input type="text"
                                            name="handler_url"
                                            id="handler_url"
                                            value="{{ old('handler_url') }}"
-                                           class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"/>
-                                    <span
-                                        class="absolute start-0 top-2 -translate-y-1/2 text-xs text-gray-700 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs">
-                                    {{ __('URL обработчика') }}
-                                </span>
-                                </label>
-                                <span class="text-gray-500 text-xs mt-2">
-                                    {{ __('Пример: handler или handler.php') }}
-                                </span>
+                                           class="peer w-full py-2 border-2 border-gold-200 rounded-md focus:ring-1 focus:ring-gold-300 focus:border-gold-300 focus:outline-none placeholder-transparent">
+                                    <label for="handler_url"
+                                           class="text-neutral-500 text-sm font-semibold  absolute -top-4 left-2 -translate-y-1/2 transition-all peer-placeholder-shown:left-4 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-neutral-900 peer-focus:-top-4 peer-focus:left-2 peer-focus:text-neutral-600">
+                                        {{ __('URL обработчика') }}
+                                    </label>
+                                </div>
                                 @error('handler_url')
                                 <p class="text-red-500 text-xs mt-2">{{ $message }}</p>
                                 @enderror
@@ -137,7 +124,6 @@
                         </div>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>

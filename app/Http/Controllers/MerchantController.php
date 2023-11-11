@@ -60,6 +60,26 @@ class MerchantController extends Controller
 
     /**
      * @param $id
+     * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+     */
+    public function edit($id): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    {
+        $merchant = Merchant::find($id);
+
+        return view('merchant.edit', ['merchant' => $merchant]);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $merchant = Merchant::find($id);
+        $merchant->update($request->all());
+
+        return back();
+    }
+
+
+    /**
+     * @param $id
      * @return RedirectResponse
      */
     public function activateOrDeactivate($id): RedirectResponse

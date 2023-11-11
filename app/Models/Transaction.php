@@ -16,6 +16,7 @@ class Transaction extends Model
      */
     protected $fillable = [
         'm_id',
+        'user_id',
         'payment_id',
         'withdrawal_id',
         'amount',
@@ -61,6 +62,11 @@ class Transaction extends Model
     protected function user(): HasOne
     {
         return $this->hasOne(User::class, 'id', 'user_id');
+    }
+
+    public function clientResponse(): HasOne
+    {
+        return $this->hasOne(ClientResponse::class, 'id', 'transaction_id');
     }
 
 }
