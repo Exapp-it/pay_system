@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MainController;
 use App\Http\Controllers\MerchantController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
@@ -7,11 +8,17 @@ use App\Http\Controllers\WithdrawalController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::get('/dashboard', function () {
-    return view('user.index');
-})->middleware('auth')->name('dashboard');
-
 Route::middleware('auth')->group(function () {
+
+    Route::get('/dashboard', [MainController::class, 'index'])
+        ->name('dashboard');
+
+    Route::get('history', [MainController::class, 'history'])
+        ->name('history');
+
+    Route::get('{id}/transaction', [MainController::class, 'transaction'])
+        ->name('transaction');
+
     Route::prefix('profile')->group(function () {
         Route::get('edit', [ProfileController::class, 'edit'])
             ->name('profile.edit');

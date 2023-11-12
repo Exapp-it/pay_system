@@ -62,6 +62,9 @@ class PaymentController extends Controller
         $merchant->balance += $amountDefaultCurrency;
         $merchant->save();
 
+        $payment->amount_default_currency = $amountDefaultCurrency;
+        $payment->save();
+
         return back();
     }
 

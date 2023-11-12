@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClientResponse;
 use App\Models\Merchant;
 use App\Models\Payment;
 use App\Models\PaymentSystem;
 use App\Models\Transaction;
 use App\Services\ApiService;
 use App\Services\FileUploadService;
+use GuzzleHttp\Client;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -75,6 +77,7 @@ class ApiController extends Controller
             return $carry;
         }, null);
 
+        $request->session()->put('details', $details);
 
         return view('api.pay', [
             'paymentSystem' => $paymentSystem,
@@ -102,6 +105,10 @@ class ApiController extends Controller
             $payment = Payment::find($id);
             $payment->pay_screen = $fileUpload->getFileName();
             $payment->save();
+
+            $details = $request->session()->get('details');
+            $details->increment('usage_count');
+
 
             $transaction = Transaction::create([
                 'm_id' => $payment->merchant->id,
@@ -131,11 +138,10 @@ class ApiController extends Controller
         if ($transaction->payment->approved && $transaction->confirmed) {
             return response()->json(['message' => 'Success'], 200);
         }
+
         if ($transaction->payment->canceled && $transaction->canceled) {
             return response()->json(['message' => 'Cancel'], 200);
         }
-
-//        $request->session()->flush();
 
         return response()->json(['message' => 'Waiting'], 200);
     }
@@ -145,14 +151,36 @@ class ApiController extends Controller
      * @param $action
      * @return RedirectResponse
      */
-    public function redirect(Request $request, $action): \Illuminate\Http\RedirectResponse
+    public function redirect(Request $request, $action)
     {
         $transaction = Transaction::find($request->session()->get('transaction'));
+        $request->session()->flush();
 
         if ($action === 'approve') {
+            $postData = ApiService::mappingResponseData($transaction);
+            $postData['signature'] = ApiService::generateSignature($postData);
+            unset($postData['shop_key']);
+
+            $postUrl = $transaction->merchant->handler_url;
+
+            $client = new Client();
+
+            $promise = $client->postAsync($postUrl, ['form_params' => $postData])->then(
+                function ($response) use ($postUrl, $transaction) {
+                    ClientResponse::create([
+                        'transaction_id' => $transaction->id,
+                        'data' => $response->getBody(),
+                    ]);
+                    \Log::info("Успешный асинхронный запрос ({$postUrl}):  " . $response->getBody());
+                },
+                function ($exception) use ($postUrl) {
+                    \Log::error("Ошибка при отправке асинхронного запроса ({$postUrl}): " . $exception->getMessage());
+                }
+            );
+            $promise->wait();
+
             return redirect()->to($transaction->merchant->success_url);
         }
-
         return redirect()->to($transaction->merchant->fail_url);
     }
 

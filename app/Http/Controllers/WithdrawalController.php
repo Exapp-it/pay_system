@@ -42,7 +42,7 @@ class WithdrawalController extends Controller
         }
 
         $merchant->balance -= $request->post('amount');
-//        $merchant->save();
+        $merchant->save();
 
         $currencies = config('payment.currencies');
         $currentCurrency = $paymentSystem->currency;
@@ -69,10 +69,13 @@ class WithdrawalController extends Controller
             'payment_system' => $paymentSystem->id,
             'details' => $request->post('details'),
             'amount' => $amountCurrentCurrency,
+            'amount_default_currency' => $amountDefaultCurrency,
             'currency' => $paymentSystem->currency,
         ]);
 
+
         $transaction = Transaction::create([
+            'user_id' => $withdrawal->user_id,
             'm_id' => $merchant->id,
             'amount' => $withdrawal->amount,
             'currency' => $withdrawal->currency,

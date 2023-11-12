@@ -53,11 +53,17 @@
                         <span class="py-3">{{ __('Вывод средств') }}</span>
                     </a>
 
-                    <a href="#"
+                    <a href="{{route('history')}}"
                        class="text-gold-300 flex justify-center mt-4 transition duration-300 hover:bg-gold-300/25 hover:text-gold-100 hover:shadow-md text-left"
-                       x-bind:class="{'dashboard-active-link': currentRoute === ''}">
-                        <span class="py-3">Настройки</span>
+                       x-bind:class="{'text-gold-100': currentRoute === 'history'}">
+                        <span class="py-3">{{ __('История') }}</span>
                     </a>
+
+{{--                    <a href="#"--}}
+{{--                       class="text-gold-300 flex justify-center mt-4 transition duration-300 hover:bg-gold-300/25 hover:text-gold-100 hover:shadow-md text-left"--}}
+{{--                       x-bind:class="{'dashboard-active-link': currentRoute === ''}">--}}
+{{--                        <span class="py-3">Настройки</span>--}}
+{{--                    </a>--}}
 
                     <form class="flex justify-center" action="{{ route("logout") }}" method="POST">
                         @csrf

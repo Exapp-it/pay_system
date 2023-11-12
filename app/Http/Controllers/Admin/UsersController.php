@@ -11,13 +11,5 @@ use Illuminate\Http\Request;
 
 class UsersController extends Controller
 {
-    /**
-     * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
-     */
-    public function all(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
-    {
-        $users = User::query()->paginate(10);
 
-        return view('admin.users', ['users' => $users]);
-    }
 }

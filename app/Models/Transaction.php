@@ -64,9 +64,9 @@ class Transaction extends Model
         return $this->hasOne(User::class, 'id', 'user_id');
     }
 
-    public function clientResponse(): HasOne
+    public function response(): HasOne
     {
-        return $this->hasOne(ClientResponse::class, 'id', 'transaction_id');
+        return $this->hasOne(ClientResponse::class, 'transaction_id');
     }
 
 }

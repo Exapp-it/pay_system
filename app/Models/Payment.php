@@ -17,6 +17,7 @@ class Payment extends Model
     protected $fillable = [
         'm_id',
         'amount',
+        'amount_default_currency',
         'currency',
         'order',
         'payment_system',
@@ -52,7 +53,7 @@ class Payment extends Model
     /**
      * @return HasOne
      */
-    public function Transaction(): HasOne
+    public function transaction(): HasOne
     {
         return $this->hasOne(Transaction::class, 'payment_id');
     }

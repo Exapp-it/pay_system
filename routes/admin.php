@@ -15,8 +15,14 @@ Route::middleware('admin.auth')->group(function () {
     Route::get('/', [MainController::class, 'index'])
         ->name('admin');
 
-    Route::get('users', [UsersController::class, 'all'])
+    Route::get('users', [MainController::class, 'users'])
         ->name('admin.users');
+
+    Route::get('history', [MainController::class, 'history'])
+        ->name('admin.history');
+
+    Route::get('{id}/transaction', [MainController::class, 'transaction'])
+        ->name('admin.transaction');
 
     Route::get('logout', [LoginController::class, 'destroy'])
         ->name('admin.logout');

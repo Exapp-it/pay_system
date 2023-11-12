@@ -69,5 +69,38 @@ class ApiService
         return strtoupper($hashedValue);
     }
 
+    /**
+     * @param Transaction $transaction
+     * @return array
+     */
+    public static function mappingResponseData(Transaction $transaction): array
+    {
+        $payment = $transaction->payment()->first();
 
+        return [
+            'status' => 'success',
+            'operation_id' => $transaction->id,
+            'operation_pay_system' => $payment->payment_system,
+            'operation_date' => $transaction->created_at->format('Y-m-d H:i:s'),
+            'operation_pay_date' => $transaction->updated_at->format('Y-m-d H:i:s'),
+            'shop' => $payment->m_id,
+            'order' => $payment->order,
+            'amount' => $transaction->amount,
+            'amount_azn' => $payment->amount_default_currency,
+            'currency' => $transaction->currency,
+            'shop_key' => $payment->merchant->m_key,
+        ];
+    }
+
+    /**
+     * @param $data
+     * @return string
+     */
+    public static function generateSignature($data): string
+    {
+        $hashString = implode(':', $data);
+        $hashedValue = hash('sha256', $hashString);
+
+        return strtoupper($hashedValue);
+    }
 }

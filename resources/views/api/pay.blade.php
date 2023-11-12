@@ -67,15 +67,14 @@
                     <p class="mb-2 text-xl font-bold text-gray-900">{{__('Номер счета (кошелька) получателя.')}}</p>
                     <label
                         class="relative block overflow-hidden border-b border-gray-200 bg-transparent pt-3 focus-within:border-blue-600">
-                        <div x-data="{ copyDetails: {{ $details->value }} }" class="relative">
+                        <div x-data="{}" class="relative">
                             <input type="text"
-                                   x-model="copyDetails"
                                    value="{{ $details->value }}"
                                    class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 pr-10 sm:text-sm"
                                    readonly
                             />
 
-                            <button @click="$store.copy(copyDetails)"
+                            <button @click="$store.copy('{{ $details->value }}')"
                                     class="absolute right-2 top-2 cursor-pointer text-gold-500 hover:underline">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -112,14 +111,13 @@
                     <label
                         class="relative block overflow-hidden border-b border-gray-200 bg-transparent pt-3 focus-within:border-blue-600">
                         <span class="text-sm font-semibold"> {{$payment->currency}}</span>
-                        <div x-data="{ copyAmount: {{ $payment->amount }}.toFixed(2) }" class="relative">
+                        <div x-data="{}" class="relative">
                             <input type="text"
-                                   x-model="copyAmount"
                                    value="{{$payment->amount}}"
                                    class="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
                                    readonly
                             />
-                            <button @click="$store.copy(copyAmount)"
+                            <button @click="$store.copy('{{ $payment->amount }}')"
                                     class="absolute right-2 top-2 cursor-pointer text-gold-500 hover:underline">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                      stroke-width="1.5" stroke="currentColor" class="w-6 h-6">

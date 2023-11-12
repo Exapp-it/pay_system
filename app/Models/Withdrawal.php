@@ -19,6 +19,7 @@ class Withdrawal extends Model
         'payment_system',
         'details',
         'amount',
+        'amount_default_currency',
         'currency',
         'approved',
         'canceled',
@@ -51,7 +52,7 @@ class Withdrawal extends Model
     /**
      * @return HasOne
      */
-    public function Transaction(): HasOne
+    public function transaction(): HasOne
     {
         return $this->hasOne(Transaction::class, 'withdrawal_id');
     }

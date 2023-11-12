@@ -11,3 +11,15 @@ if (!function_exists('calculatePercent')) {
         return $totalAmount * ($percentage / 100);
     }
 }
+
+if (!function_exists('moneyFormat')) {
+    /**
+     * @param float $amount
+     * @return string
+     */
+    function moneyFormat(float $amount): string
+    {
+        return number_format($amount, 2, '.', ' ');
+
+    }
+}

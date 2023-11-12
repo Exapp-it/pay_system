@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->string('details');
 
             $table->decimal('amount');
-            $table->decimal('amount_default_currency');
+            $table->decimal('amount_default_currency')->default(0);
             $table->string('currency');
 
             $table->boolean('approved')->default(false);

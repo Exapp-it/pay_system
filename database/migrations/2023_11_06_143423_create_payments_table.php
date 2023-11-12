@@ -17,7 +17,7 @@ return new class extends Migration {
 
 
             $table->decimal('amount');
-            $table->decimal('amount_default_currency');
+            $table->decimal('amount_default_currency')->default(0);
             $table->string('currency');
             $table->string('order');
 
