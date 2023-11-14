@@ -27,7 +27,7 @@ class PaymentSystemService
             'url' => ['required', 'url'],
             'desc' => ['required', 'string'],
             'logo' => ['required', 'image', 'mimes:jpeg,png,jpg,gif'],
-            'currency' => ['required', Rule::in(config('payment.currencies'))],
+            'currency' => ['required'],
         ]);
 
         return $this;
