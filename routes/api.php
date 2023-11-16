@@ -22,6 +22,9 @@ Route::post('pay/{id}/send-order', [ApiController::class, 'sendOrder'])
 Route::post('pay/confirm', [ApiController::class, 'payConfirm'])
     ->name('api.pay.confirm');
 
+Route::post('pay/{id}/confirm/manual', [ApiController::class, 'payConfirmManual'])
+    ->name('api.pay.confirm.manual');
+
 Route::get('redirect/{action}', [ApiController::class, 'redirect'])
     ->name('api.pay.redirect');
 

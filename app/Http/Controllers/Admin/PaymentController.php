@@ -5,26 +5,53 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Services\ExchangeService;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 
 class PaymentController extends Controller
 {
     /**
      * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
      */
-    public function index(): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
+    public function index(): Application|Factory|View|\Illuminate\Contracts\Foundation\Application
     {
-        $payments = Payment::query()
-            ->whereNotNull('pay_screen')
-            ->orderBy('created_at', 'DESC')
+        $payments = Payment::whereNotNull('pay_screen')
+            ->with('transaction')
+            ->with('system')
+            ->orderBy('updated_at', 'DESC')
             ->paginate(10);
 
         return view('admin.payments', ['payments' => $payments]);
     }
+
+
+    /**
+     * @param Request $request
+     * @return JsonResponse|RedirectResponse
+     */
+// Ваш метод в контроллере
+    public function fetch(Request $request)
+    {
+        $lastUpdated = $request->input('last_updated');
+
+        $lastUpdated = Carbon::parse($lastUpdated);
+
+        $newPayments = Payment::whereNotNull('pay_screen')
+            ->with('transaction')
+            ->with('system')
+            ->with('merchant')
+            ->where('updated_at', '>', $lastUpdated)
+            ->get();
+
+        return response()->json(['newPayments' => $newPayments]);
+    }
+
 
     /**
      * @param Request $request
@@ -37,9 +64,9 @@ class PaymentController extends Controller
         $payment->approved = true;
         $payment->save();
 
-        $transaction = $payment->transaction;
-        $transaction->confirmed = true;
-        $transaction->save();
+//        $transaction = $payment->transaction;
+//        $transaction->confirmed = true;
+//        $transaction->save();
 
         $currencies = config('payment.currencies');
         $currentCurrency = $payment->currency;

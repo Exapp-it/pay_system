@@ -104,6 +104,10 @@ Route::middleware('admin.auth')->group(function () {
         Route::get('', [PaymentController::class, 'index'])
             ->name('admin.payments');
 
+        Route::get('fetch', [PaymentController::class, 'fetch'])
+            ->name('admin.payments.fetch');
+
+
         Route::post('{id}/approve', [PaymentController::class, 'approve'])
             ->name('admin.payment.approve');
 

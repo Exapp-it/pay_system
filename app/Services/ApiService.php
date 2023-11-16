@@ -27,6 +27,7 @@ class ApiService
             'shop' => ['required'],
             'order' => ['required'],
             'amount' => ['required', 'numeric'],
+			'username' => ['required'],
             'currency' => ['required'],
             'signature' => ['required'],
         ]);;
@@ -88,6 +89,7 @@ class ApiService
             'amount' => $transaction->amount,
             'amount_azn' => $payment->amount_default_currency,
             'currency' => $transaction->currency,
+            'shop_key' => $payment->merchant->m_key,
         ];
     }
 
@@ -95,23 +97,9 @@ class ApiService
      * @param $data
      * @return string
      */
-    public static function generateSignature($data, $key): string
+    public static function generateSignature($data): string
     {
-        $hashData = [
-            $data['status'],
-            $data['operation_id'],
-            $data['operation_pay_system'],
-            $data['operation_date'],
-            $data['operation_pay_date'],
-            $data['shop'],
-            $data['order'],
-            $data['amount'],
-            $data['amount_azn'],
-            $data['currency'],
-            $key
-        ];
-
-        $hashString = implode(':', $hashData);
+        $hashString = implode(':', $data);
         $hashedValue = hash('sha256', $hashString);
 
         return strtoupper($hashedValue);

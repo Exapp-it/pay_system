@@ -31,7 +31,7 @@ class ApiController extends Controller
             ->where('m_id', $request->session()->get('shop'))
             ->first();
 
-        $request->session()->put(['data' => $request->only('order', 'amount', 'currency')]);
+        $request->session()->put(['data' => $request->only('order', 'amount', 'currency', 'username')]);
 
         $paymentSystems = PaymentSystem::query()
             ->where('currency', $request->only('currency'))
@@ -39,7 +39,7 @@ class ApiController extends Controller
             ->get();
 
         return view('api.index', [
-            'data' => (object)$request->only('order', 'amount', 'currency'),
+            'data' => (object)$request->only('order', 'amount', 'currency', 'username'),
             'paymentSystems' => $paymentSystems,
             'shop' => $merchant,
         ]);
@@ -48,7 +48,6 @@ class ApiController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
      * @return View|Application|Factory|\Illuminate\Contracts\Foundation\Application
      */
     public function pay(Request $request): View|Application|Factory|\Illuminate\Contracts\Foundation\Application
@@ -66,6 +65,7 @@ class ApiController extends Controller
             'amount' => $data->amount,
             'currency' => $data->currency,
             'order' => $data->order,
+//			'username' => $data->username,
             'payment_system' => $paymentSystem->id,
         ]);
 
@@ -135,7 +135,7 @@ class ApiController extends Controller
     {
         $transaction = Transaction::find($request->session()->get('transaction'));
 
-        if ($transaction->payment->approved && $transaction->confirmed) {
+        if ($transaction->payment->approved) {
             return response()->json(['message' => 'Success'], 200);
         }
 
@@ -146,6 +146,19 @@ class ApiController extends Controller
         return response()->json(['message' => 'Waiting'], 200);
     }
 
+    public function payConfirmManual(Request $request, $id): RedirectResponse
+    {
+        $transaction = Transaction::find($id);
+
+        if ($transaction->payment->approved) {
+            $transaction->confirmed = true;
+            $transaction->save();
+            $this->sendAsyncRequest($transaction);
+        }
+
+        return back();
+    }
+
     /**
      * @param Request $request
      * @param $action
@@ -154,38 +167,49 @@ class ApiController extends Controller
     public function redirect(Request $request, $action)
     {
         $transaction = Transaction::find($request->session()->get('transaction'));
-//        $request->session()->flush();
+        $request->session()->flush();
 
         if ($action === 'approve') {
-            $postData = ApiService::mappingResponseData($transaction);
-            $postData['signature'] = ApiService::generateSignature($postData, $transaction->merchant->m_key);
-
-            $postUrl = $transaction->merchant->handler_url;
-            $postUrl = 'http://dev.it/handler.php';
-
-            $client = new Client();
-
-            $promise = $client->postAsync($postUrl, ['form_params' => $postData])->then(
-                function ($response) use ($postUrl, $transaction) {
-                    ClientResponse::create([
-                        'transaction_id' => $transaction->id,
-                        'data' => json_encode($response->getBody()->getContents()),
-                    ]);
-                    \Log::info("Успешный асинхронный запрос ({$postUrl}):  " . $response->getBody());
-                },
-                function ($exception) use ($postUrl, $transaction) {
-                    ClientResponse::create([
-                        'transaction_id' => $transaction->id,
-                        'data' => json_encode($exception->getMessage()),
-                    ]);
-                    \Log::error("Ошибка при отправке асинхронного запроса ({$postUrl}): " . $exception->getMessage());
-                }
-            );
-            $promise->wait();
-
+            $transaction->confirmed = true;
+            $transaction->save();
+            $this->sendAsyncRequest($transaction);
             return redirect()->to($transaction->merchant->success_url);
         }
+
         return redirect()->to($transaction->merchant->fail_url);
+    }
+
+    /**
+     * @param $transaction
+     * @return void
+     */
+    protected function sendAsyncRequest($transaction): void
+    {
+        $postData = ApiService::mappingResponseData($transaction);
+        $postData['signature'] = ApiService::generateSignature($postData, $transaction->merchant->m_key);
+
+        $postUrl = $transaction->merchant->handler_url;
+
+        $client = new Client();
+
+        $promise = $client->postAsync($postUrl, ['form_params' => $postData])->then(
+            function ($response) use ($postUrl, $transaction) {
+                ClientResponse::updateOrCreate(
+                    ['transaction_id' => $transaction->id],
+                    ['data' => json_encode($response->getBody()->getContents())]
+                );
+                \Log::info("Успешный асинхронный запрос ({$postUrl}): " . $response->getBody());
+            },
+            function ($exception) use ($postUrl, $transaction) {
+                ClientResponse::updateOrCreate(
+                    ['transaction_id' => $transaction->id],
+                    ['data' => json_encode($exception->getMessage())]
+                );
+                \Log::error("Ошибка при отправке асинхронного запроса ({$postUrl}): " . $exception->getMessage());
+            }
+        );
+
+        $promise->wait();
     }
 
 
