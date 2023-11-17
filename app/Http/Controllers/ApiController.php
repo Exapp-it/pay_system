@@ -65,7 +65,7 @@ class ApiController extends Controller
             'amount' => $data->amount,
             'currency' => $data->currency,
             'order' => $data->order,
-//			'username' => $data->username,
+			'username' => $data->username,
             'payment_system' => $paymentSystem->id,
         ]);
 
@@ -146,18 +146,18 @@ class ApiController extends Controller
         return response()->json(['message' => 'Waiting'], 200);
     }
 
-    public function payConfirmManual(Request $request, $id): RedirectResponse
-    {
-        $transaction = Transaction::find($id);
-
-        if ($transaction->payment->approved) {
-            $transaction->confirmed = true;
-            $transaction->save();
-            $this->sendAsyncRequest($transaction);
-        }
-
-        return back();
-    }
+//    public function payConfirmManual(Request $request, $id): RedirectResponse
+//    {
+//        $transaction = Transaction::find($id);
+//
+//        if ($transaction->payment->approved) {
+//            $transaction->confirmed = true;
+//            $transaction->save();
+//            $this->sendAsyncRequest($transaction);
+//        }
+//
+//        return back();
+//    }
 
     /**
      * @param Request $request
@@ -170,9 +170,6 @@ class ApiController extends Controller
         $request->session()->flush();
 
         if ($action === 'approve') {
-            $transaction->confirmed = true;
-            $transaction->save();
-            $this->sendAsyncRequest($transaction);
             return redirect()->to($transaction->merchant->success_url);
         }
 
@@ -183,34 +180,7 @@ class ApiController extends Controller
      * @param $transaction
      * @return void
      */
-    protected function sendAsyncRequest($transaction): void
-    {
-        $postData = ApiService::mappingResponseData($transaction);
-        $postData['signature'] = ApiService::generateSignature($postData, $transaction->merchant->m_key);
 
-        $postUrl = $transaction->merchant->handler_url;
-
-        $client = new Client();
-
-        $promise = $client->postAsync($postUrl, ['form_params' => $postData])->then(
-            function ($response) use ($postUrl, $transaction) {
-                ClientResponse::updateOrCreate(
-                    ['transaction_id' => $transaction->id],
-                    ['data' => json_encode($response->getBody()->getContents())]
-                );
-                \Log::info("Успешный асинхронный запрос ({$postUrl}): " . $response->getBody());
-            },
-            function ($exception) use ($postUrl, $transaction) {
-                ClientResponse::updateOrCreate(
-                    ['transaction_id' => $transaction->id],
-                    ['data' => json_encode($exception->getMessage())]
-                );
-                \Log::error("Ошибка при отправке асинхронного запроса ({$postUrl}): " . $exception->getMessage());
-            }
-        );
-
-        $promise->wait();
-    }
 
 
 }

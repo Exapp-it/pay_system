@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Services\ExchangeService;
+use App\Services\PaymentService;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -64,9 +65,9 @@ class PaymentController extends Controller
         $payment->approved = true;
         $payment->save();
 
-//        $transaction = $payment->transaction;
-//        $transaction->confirmed = true;
-//        $transaction->save();
+        $transaction = $payment->transaction;
+        $transaction->confirmed = true;
+        $transaction->save();
 
         $currencies = config('payment.currencies');
         $currentCurrency = $payment->currency;
@@ -79,7 +80,7 @@ class PaymentController extends Controller
             })->keys()->first();
 
             $amountUSD = $payment->amount;
-            if ($currentCurrency !== 'USD') {
+            if ($currentCurrency !== 'USD' && $currentCurrency !== 'USDT') {
                 $amountUSD = ExchangeService::toUSD($payment->amount, $currentCurrency, $type);
             }
             $amountDefaultCurrency = ExchangeService::toDefaultCurrency($amountUSD);
@@ -91,6 +92,7 @@ class PaymentController extends Controller
 
         $payment->amount_default_currency = $amountDefaultCurrency;
         $payment->save();
+        PaymentService::sendAsyncRequest($transaction);
 
         return back();
     }

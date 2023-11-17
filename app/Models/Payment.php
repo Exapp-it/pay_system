@@ -20,6 +20,7 @@ class Payment extends Model
         'amount_default_currency',
         'currency',
         'order',
+        'username',
         'payment_system',
         'pay_screen',
         'approved',
