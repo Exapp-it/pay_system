@@ -9,6 +9,8 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+Route::get('vue', [TestController::class, 'index']);
+
 
 
 
