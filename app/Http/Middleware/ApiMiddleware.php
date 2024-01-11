@@ -18,6 +18,7 @@ class ApiMiddleware
         if ($this->isProcess($request)) {
             return $next($request);
         }
+        exit(456456465);
         abort(403);
     }
 
@@ -27,6 +28,6 @@ class ApiMiddleware
      */
     public function isProcess(Request $request): bool
     {
-        return $request->post('handler') === 'process';
+        return $request->input('handler') === 'process';
     }
 }
