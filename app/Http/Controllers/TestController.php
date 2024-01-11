@@ -3,22 +3,51 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\Transaction;
+use Carbon\Carbon;
 
 class  TestController extends Controller
 {
 
-    public function index()
+
+    public function transaction($id)
+    {
+
+
+        return inertia('Admin/Transaction', [
+            'title' => 'Транзакция - ' . $id,
+            'order' => Transaction::find($id),
+        ]);
+    }
+
+    public function payments()
     {
         $payments = Payment::query()
             ->with('transaction')
             ->with('system')
             ->with('merchant')
-            ->get();
+            ->orderByDesc('created_at')
+            ->paginate(3);
 
-        return inertia('Payments', [
-            'title' => 'Vue testing',
+
+        return inertia('Admin/Payments', [
+            'title' => 'Платежи',
             'payments' => $payments,
         ]);
+    }
+
+    public function paymentsUpdate()
+    {
+        $lastUpdated = Carbon::now();
+
+        $payments = Payment::query()
+            ->with('transaction')
+            ->with('system')
+            ->with('merchant')
+            ->orderByDesc('created_at')
+            ->paginate(3);
+
+        return response()->json(['payments' => $payments]);
     }
 
 //    public function test(): void

@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\ClientResponse;
 use App\Models\Merchant;
 use App\Models\Payment;
 use App\Models\PaymentSystem;
 use App\Models\Transaction;
-use App\Services\ApiService;
 use App\Services\FileUploadService;
-use GuzzleHttp\Client;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -31,12 +28,18 @@ class ApiController extends Controller
             ->where('m_id', $request->session()->get('shop'))
             ->first();
 
+        dd($request->method());
+
         $request->session()->put(['data' => $request->only('order', 'amount', 'currency', 'username')]);
 
         $paymentSystems = PaymentSystem::query()
             ->where('currency', $request->only('currency'))
             ->where('activated', true)
+            ->when($this->shouldExcludeById($request->input('amount')), function ($query) {
+                return $query->whereNotIn('title', ['Card AZ']);
+            })
             ->get();
+
 
         return view('api.index', [
             'data' => (object)$request->only('order', 'amount', 'currency', 'username'),
@@ -60,12 +63,13 @@ class ApiController extends Controller
 
         $paymentSystem = PaymentSystem::find($request->get('payment_system'));
 
+
         $payment = Payment::create([
             'm_id' => $request->session()->get('shop'),
             'amount' => $data->amount,
             'currency' => $data->currency,
             'order' => $data->order,
-			'username' => $data->username,
+            'username' => $data->username,
             'payment_system' => $paymentSystem->id,
         ]);
 
@@ -177,10 +181,13 @@ class ApiController extends Controller
     }
 
     /**
-     * @param $transaction
-     * @return void
+     * @param $amount
+     * @return bool
      */
-
+    private function shouldExcludeById($amount): bool
+    {
+        return $amount < 10;
+    }
 
 
 }

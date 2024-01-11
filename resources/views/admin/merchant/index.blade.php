@@ -30,6 +30,9 @@
                                 {{ __('Комиссия')  }}
                             </th>
                             <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                                {{ __('Сумма платежей за сегодня')  }}
+                            </th>
+                            <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
                                 {{ __('Статус')  }}
                             </th>
                             <th class="px-6 py-3 border-b border-gray-200 bg-gray-50 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
@@ -69,6 +72,13 @@
                                     <div class="text-sm leading-5 text-gray-900">
                                         <p>
                                             {{ $merchant->percent }} %
+                                        </p>
+                                    </div>
+                                </td>
+                                <td class="font-semibold px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                                    <div class="text-sm leading-5 text-gray-900">
+                                        <p>
+                                            {{ $merchant->totalTransactions }} {{config('payment.default_currency.name')}}
                                         </p>
                                     </div>
                                 </td>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Merchant;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
@@ -21,6 +22,15 @@ class MerchantController extends Controller
         $merchants = Merchant::query()
             ->orderBy('created_at', 'DESC')
             ->paginate(10);
+
+        $merchants->each(function ($merchant) {
+            $totalTransactions = $merchant->payments()
+                ->where('approved', true)
+                ->whereDate('created_at', Carbon::today())
+                ->sum('amount_default_currency');
+
+            $merchant->totalTransactions = $totalTransactions;
+        });
 
         return view('admin.merchant.index', ['merchants' => $merchants]);
     }
@@ -105,5 +115,19 @@ class MerchantController extends Controller
         $merchant->save();
 
         return back();
+    }
+
+    private function getTotalTransactionsForMerchants($merchants): int
+    {
+        $currentDate = Carbon::today();
+        $totalTransactions = 0;
+
+        foreach ($merchants as $merchant) {
+            $totalTransactions += $merchant->transactions()
+                ->whereDate('created_at', $currentDate)
+                ->sum('amount');
+        }
+
+        return $totalTransactions;
     }
 }
