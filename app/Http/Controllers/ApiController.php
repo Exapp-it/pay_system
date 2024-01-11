@@ -28,7 +28,6 @@ class ApiController extends Controller
             ->where('m_id', $request->session()->get('shop'))
             ->first();
 
-        dd($request->method());
 
         $request->session()->put(['data' => $request->only('order', 'amount', 'currency', 'username')]);
 
@@ -58,21 +57,10 @@ class ApiController extends Controller
         $request->validate([
             'payment_system' => ['required'],
         ]);
-
         $data = (object)$request->session()->get('data');
+        $merchant = Merchant::where('m_id', $request->session()->get('shop'))->first();
 
         $paymentSystem = PaymentSystem::find($request->get('payment_system'));
-
-
-        $payment = Payment::create([
-            'm_id' => $request->session()->get('shop'),
-            'amount' => $data->amount,
-            'currency' => $data->currency,
-            'order' => $data->order,
-            'username' => $data->username,
-            'payment_system' => $paymentSystem->id,
-        ]);
-
 
         $details = $paymentSystem->infos->reduce(function ($carry, $info) {
             if ($carry === null || $info->usage_count < $carry->usage_count) {
@@ -83,10 +71,23 @@ class ApiController extends Controller
 
         $request->session()->put('details', $details);
 
+
+        $payment = Payment::create([
+            'm_id' => $request->session()->get('shop'),
+            'amount' => $data->amount,
+            'currency' => $data->currency,
+            'order' => $data->order,
+            'username' => $data->username,
+            'payment_system' => $paymentSystem->id,
+            'details' => $details->value,
+        ]);
+
+
         return view('api.pay', [
             'paymentSystem' => $paymentSystem,
             'details' => $details,
             'payment' => $payment,
+            'shop' => $merchant,
         ]);
     }
 
@@ -150,18 +151,18 @@ class ApiController extends Controller
         return response()->json(['message' => 'Waiting'], 200);
     }
 
-//    public function payConfirmManual(Request $request, $id): RedirectResponse
-//    {
-//        $transaction = Transaction::find($id);
-//
-//        if ($transaction->payment->approved) {
-//            $transaction->confirmed = true;
-//            $transaction->save();
-//            $this->sendAsyncRequest($transaction);
-//        }
-//
-//        return back();
-//    }
+    //    public function payConfirmManual(Request $request, $id): RedirectResponse
+    //    {
+    //        $transaction = Transaction::find($id);
+    //
+    //        if ($transaction->payment->approved) {
+    //            $transaction->confirmed = true;
+    //            $transaction->save();
+    //            $this->sendAsyncRequest($transaction);
+    //        }
+    //
+    //        return back();
+    //    }
 
     /**
      * @param Request $request
@@ -188,6 +189,4 @@ class ApiController extends Controller
     {
         return $amount < 10;
     }
-
-
 }

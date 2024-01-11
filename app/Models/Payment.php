@@ -22,6 +22,7 @@ class Payment extends Model
         'order',
         'username',
         'payment_system',
+        'details',
         'pay_screen',
         'approved',
         'canceled',

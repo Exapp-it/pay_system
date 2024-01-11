@@ -23,6 +23,7 @@ class Merchant extends Model
         'success_url',
         'fail_url',
         'handler_url',
+        'phone',
         'balance',
         'percent',
         'm_id',
@@ -79,6 +80,4 @@ class Merchant extends Model
             ->where('activated', true)
             ->where('banned', false);
     }
-
-
 }
